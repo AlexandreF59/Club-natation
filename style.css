@@ -2,6 +2,12 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background: white; /* fond blanc pour le contenu central */
+  color: black;
+}
+
+header, footer {
+  padding: 15px 20px;
   background: linear-gradient(to right, 
     white 0%, 
     white 10%,     
@@ -14,11 +20,6 @@ body {
     white 90%, 
     white 100%
   );
-  color: black; /* texte en noir */
-}
-
-header, footer {
-  padding: 15px 20px;
 }
 
 header {
@@ -68,3 +69,4 @@ main {
     margin-top: 10px;
   }
 }
+
