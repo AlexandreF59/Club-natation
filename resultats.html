@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Résultats - Hauts de Flandre Natation</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Styles spécifiques pour le tableau */
+    .csv-table {
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 800px;
+      margin: 2em auto;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
 
+    .csv-table th, .csv-table td {
+      border: 1px solid #ccc;
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    .csv-table th {
+      background-color: #0057b8;
+      color: white;
+    }
+
+    .csv-table tr:nth-child(even) {
+      background-color: #e6f0fa;
+    }
+
+    .csv-table tr:hover {
+      background-color: #d0e4ff;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+
+<div id="header"></div>
+
+<main>
+  <h2>Résultats du club</h2>
+  <div id="tableContainer">Chargement des résultats...</div>
+</main>
+
+<div id="footer"></div>
+
+<script>
+  // Charger header et footer
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => { document.getElementById('header').innerHTML = data; });
+
+  fetch('footer.html')
+    .then(response => response.text())
+    .then(data => { document.getElementById('footer').innerHTML = data; });
+
+  // Charger le CSV depuis le serveur
+  fetch('data/resultats.csv')
+    .then(response => response.text())
+    .then(text => {
+      const rows = text.split('\n').map(r => r.split(','));
+      let table = '<table class="csv-table"><thead><tr>';
+      rows[0].forEach(header => table += `<th>${header.trim()}</th>`);
+      table += '</tr></thead><tbody>';
+      for(let i=1; i<rows.length; i++){
+        if(rows[i].length === 1 && rows[i][0].trim() === '') continue; // ignore les lignes vides
+        table += '<tr>';
+        rows[i].forEach(cell => table += `<td>${cell.trim()}</td>`);
+        table += '</tr>';
+      }
+      table += '</tbody></table>';
+      document.getElementById('tableContainer').innerHTML = table;
+    })
+    .catch(err => {
+      document.getElementById('tableContainer').innerHTML = 'Impossible de charger les résultats.';
+      console.error(err);
+    });
+</script>
+
+</body>
+</html>
