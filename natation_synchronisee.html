@@ -1,1 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Natation Synchronisée - Hauts de Flandre Natation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header chargé dynamiquement -->
+  <div id="header"></div>
+
+  <main>
+    <h2>Natation Synchronisée</h2>
+
+    <p>
+      La natation synchronisée allie élégance, précision et sportivité dans l'eau ! 🌊🤸‍♀️
+      Nos nageuses et nageurs réalisent des figures et mouvements chorégraphiés, parfaitement synchronisés avec la musique. C’est à la fois un spectacle et un excellent entraînement pour la force, la souplesse et l’endurance.
+    </p>
+
+    <p>
+      Nous sommes particulièrement fiers d’avoir la natation synchronisée au sein de notre club. Cette discipline est assez rare, et elle apporte une dimension unique et prestigieuse à notre programme sportif.
+    </p>
+
+    <p>
+      Que vous soyez débutant(e) ou confirmé(e), rejoignez-nous pour découvrir la joie de nager en rythme et en harmonie. Nous sommes ravis d’accueillir chaque nouveau membre dans notre équipe pleine d’énergie et de bonne humeur !
+    </p>
+
+    <img src="images/natation_synchronisee.jpg" alt="Natation Synchronisée" width="500">
+  </main>
+
+  <!-- Footer chargé dynamiquement -->
+  <footer id="footer"></footer>
+
+  <script>
+    // Charger le header
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('header').innerHTML = data; });
+
+    // Charger le footer
+    fetch('footer.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('footer').innerHTML = data; });
+  </script>
+</body>
+</html>
 
