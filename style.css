@@ -1,107 +1,124 @@
-/* Corps de la page */
+/* ===========================
+   CORPS DE LA PAGE
+   =========================== */
 body {
   font-family: Arial, sans-serif; /* Police globale */
-  margin: 0;                      /* Supprime les marges par défaut du navigateur */
+  margin: 0;                      /* Supprime les marges du navigateur */
   padding: 0;                     /* Supprime le padding par défaut */
   background: white;              /* Fond blanc pour le contenu central */
   color: black;                   /* Couleur du texte par défaut */
 }
 
-/* Header et footer avec bandes colorées */
-header, footer {
-  padding: 40px 20px; /* Espace interne (hauteur + marges latérales) */
-  background: linear-gradient(to right,  /* Dégradé horizontal pour les bandes */
-    white 0%,       /* Début blanc */
-    white 10%,      /* Fin bande blanche gauche */
-    #0057b8 10%,    /* Début bande bleue */
-    #0057b8 20%,    /* Fin bande bleue */
-    white 20%,      /* Blanc central début */
-    white 80%,      /* Blanc central fin */
-    #ffcc00 80%,    /* Début bande jaune droite */
-    #ffcc00 90%,    /* Fin bande jaune */
-    white 90%,      /* Blanc après la bande jaune */
-    white 100%      /* Fin du dégradé */
+/* ===========================
+   HEADER
+   =========================== */
+header {
+  display: flex;                /* Aligne horizontalement les éléments */
+  align-items: center;          /* Centre verticalement */
+  justify-content: center;      /* Centre le texte et nav horizontalement */
+  position: relative;           /* Permet de positionner les logos en absolu */
+  padding: 20px 0;
+  background: linear-gradient(to right,
+    white 0%, white 10%,      /* Blanc gauche */
+    #0057b8 10%, #0057b8 20%, /* Bleu */
+    white 20%, white 80%,      /* Centre blanc */
+    #ffcc00 80%, #ffcc00 90%,  /* Jaune */
+    white 90%, white 100%
   );
 }
 
-/* Header spécifique */
-header {
-  display: flex;                /* Aligne les éléments horizontalement */
-  align-items: center;          /* Centre verticalement */
-  justify-content: center;      /* Centre le contenu horizontalement */
-  position: relative;           /* Pour positionner les logos en absolu */
-}
-
-/* Logo du club à gauche */
-header .logo {
-  position: absolute; /* Position absolue par rapport au header */
-  left: 20px;         /* Décalage depuis le bord gauche */
-  height: 60px;       /* Hauteur maximale */
-  max-width: 150px;   /* Largeur maximale */
-}
-
-/* Logo CCHF à droite */
+/* Logos du header */
+header .logo,
 header .logo-cchf {
-  position: absolute; /* Position absolue par rapport au header */
-  right: 20px;        /* Décalage depuis le bord droit */
-  height: 60px;       /* Hauteur maximale */
-  max-width: 150px;   /* Largeur maximale */
+  position: absolute;        /* Placement à gauche/droite */
+  top: 50%;                  /* Centre vertical */
+  transform: translateY(-50%);
+  height: 60px;              /* Hauteur fixe */
+  width: auto;               /* Largeur proportionnelle */
+  max-width: 120px;          /* Largeur maximale */
 }
 
-/* Titre principal dans le header */
-header h1 {
-  margin: 0;           /* Supprime la marge par défaut */
-  font-size: 1.8em;    /* Taille du texte */
-  text-align: center;  /* Centre le texte */
+header .logo { left: 20px; }     /* Logo du club à gauche */
+header .logo-cchf { right: 20px; } /* Logo CCHF à droite */
+
+/* Titre et navigation centrés */
+header .header-center h1 {
+  margin: 0;
+  font-size: 1.8em;
+  text-align: center;
 }
 
-/* Liens de navigation */
-nav a {
-  color: black;         /* Couleur du texte des liens */
-  margin: 0 10px;       /* Espacement horizontal entre les liens */
-  text-decoration: none;/* Supprime le soulignement */
-  font-weight: bold;    /* Texte en gras */
+header nav a {
+  color: black;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: bold;
 }
 
-nav a:hover {
-  text-decoration: underline; /* Soulignement au survol */
+header nav a:hover {
+  text-decoration: underline;
 }
 
-/* Footer */
+/* ===========================
+   FOOTER
+   =========================== */
 footer {
-  text-align: center;   /* Centre le texte horizontalement */
-  font-weight: bold;    /* Texte en gras */
-  position: relative;   /* Pour positionner éventuellement des éléments en absolu */
+  text-align: center;         /* Centre le texte */
+  font-weight: bold;          /* Texte en gras */
+  padding: 20px 0;
+  position: relative;
+  background: linear-gradient(to right,
+    white 0%, white 10%,      /* Blanc gauche */
+    #0057b8 10%, #0057b8 20%, /* Bleu */
+    white 20%, white 80%,      /* Centre blanc */
+    #ffcc00 80%, #ffcc00 90%,  /* Jaune */
+    white 90%, white 100%
+  );
 }
 
-/* Contenu principal */
+/* ===========================
+   CONTENU PRINCIPAL
+   =========================== */
 main {
-  padding: 2em;         /* Espace interne autour du contenu */
-  text-align: center;   /* Centre le texte et les images */
+  padding: 2em;
+  text-align: center;
 }
 
-/* Styles pour écrans petits / mobile */
+/* ===========================
+   VERSION MOBILE
+   =========================== */
 @media (max-width: 768px) {
+
+  /* Header empilé */
   header {
-    flex-direction: column;  /* Empile le header verticalement */
-    padding: 20px 0;         /* Réduit le padding */
+    flex-direction: column;
+    padding: 10px 0;
   }
 
+  /* Logos réduits et empilés */
   header .logo,
   header .logo-cchf {
-    position: relative;  /* Les logos s'empilent naturellement */
-    height: 40px;        /* Réduit la taille pour mobile */
-    max-width: 100px;    /* Largeur maximale pour mobile */
-    margin: 5px 0;       /* Espacement vertical */
+    position: relative;  /* empilement naturel */
+    height: 40px;        /* réduit pour mobile */
+    max-width: 100px;    /* limite largeur mobile */
+    transform: none;     /* annule le translateY */
+    margin: 5px 0;       /* espace entre logos et texte */
   }
 
+  /* Titre réduit */
   header .header-center h1 {
-    font-size: 1.4em;    /* Texte plus petit sur mobile */
+    font-size: 1.4em;
   }
 
-  nav {
+  /* Navigation centrée */
+  header nav {
     margin-top: 10px;
     text-align: center;
   }
-}
 
+  /* Footer plus compact */
+  footer {
+    font-size: 0.9em;
+    padding: 15px 0;
+  }
+}
