@@ -1,66 +1,66 @@
 /* Corps de la page */
 body {
   font-family: Arial, sans-serif; /* Police globale */
-  margin: 0; /* Supprime les marges par défaut du navigateur */
-  padding: 0; /* Supprime le padding par défaut */
-  background: white; /* Fond blanc pour le contenu central */
-  color: black; /* Couleur du texte par défaut */
+  margin: 0;                      /* Supprime les marges par défaut du navigateur */
+  padding: 0;                     /* Supprime le padding par défaut */
+  background: white;              /* Fond blanc pour le contenu central */
+  color: black;                   /* Couleur du texte par défaut */
 }
 
-/* Header et footer */
+/* Header et footer avec bandes colorées */
 header, footer {
   padding: 40px 20px; /* Espace interne (hauteur + marges latérales) */
   background: linear-gradient(to right,  /* Dégradé horizontal pour les bandes */
-    white 0%,        /* Début blanc */
-    white 10%,       /* Fin de la bande blanche à gauche */
-    #0057b8 10%,     /* Début bande bleu */
-    #0057b8 20%,     /* Fin bande bleu (10% de largeur) */
-    white 20%,       /* Blanc central début */
-    white 80%,       /* Blanc central fin */
-    #ffcc00 80%,     /* Début bande jaune droite */
-    #ffcc00 90%,     /* Fin bande jaune (10% de largeur) */
-    white 90%,       /* Blanc après la bande jaune */
-    white 100%       /* Fin du dégradé */
+    white 0%,       /* Début blanc */
+    white 10%,      /* Fin bande blanche gauche */
+    #0057b8 10%,    /* Début bande bleue */
+    #0057b8 20%,    /* Fin bande bleue */
+    white 20%,      /* Blanc central début */
+    white 80%,      /* Blanc central fin */
+    #ffcc00 80%,    /* Début bande jaune droite */
+    #ffcc00 90%,    /* Fin bande jaune */
+    white 90%,      /* Blanc après la bande jaune */
+    white 100%      /* Fin du dégradé */
   );
 }
 
 /* Header spécifique */
 header {
-  display: flex; /* Active Flexbox pour aligner les éléments horizontalement */
-  align-items: center; /* Centre verticalement les éléments */
-  justify-content: center; /* Centre le contenu horizontalement */
-  position: relative; /* Permet de positionner les logos en absolu par rapport au header */
+  display: flex;                /* Aligne les éléments horizontalement */
+  align-items: center;          /* Centre verticalement */
+  justify-content: center;      /* Centre le contenu horizontalement */
+  position: relative;           /* Pour positionner les logos en absolu */
 }
 
-/* Logo à gauche */
+/* Logo du club à gauche */
 header .logo {
-  position: absolute; /* Position fixe par rapport au header */
-  left: 20px; /* Décalage depuis le bord gauche */
-  height: 60px;       /* hauteur maximale */
-  max-width: 150px;   /* largeur maximale pour éviter que ça déborde */
+  position: absolute; /* Position absolue par rapport au header */
+  left: 20px;         /* Décalage depuis le bord gauche */
+  height: 60px;       /* Hauteur maximale */
+  max-width: 150px;   /* Largeur maximale */
 }
 
-/* Logo à droite */
+/* Logo CCHF à droite */
 header .logo-cchf {
-  position: absolute; /* Position fixe par rapport au header */
-  right: 20px; /* Décalage depuis le bord droit */
-  height: 60px;       /* hauteur maximale */
-  max-width: 150px;   /* largeur maximale */
+  position: absolute; /* Position absolue par rapport au header */
+  right: 20px;        /* Décalage depuis le bord droit */
+  height: 60px;       /* Hauteur maximale */
+  max-width: 150px;   /* Largeur maximale */
 }
 
 /* Titre principal dans le header */
 header h1 {
-  margin: 0; /* Supprime la marge par défaut */
-  font-size: 1.8em; /* Taille du texte */
-  text-align: center; /* Centre le texte */
+  margin: 0;           /* Supprime la marge par défaut */
+  font-size: 1.8em;    /* Taille du texte */
+  text-align: center;  /* Centre le texte */
 }
 
 /* Liens de navigation */
 nav a {
-  color: black; /* Couleur du texte des liens */
-  margin: 0 10px; /* Espacement horizontal entre les liens */
-  text-decoration: none; /* Supprime le soulignement */
-  font-weight: bold; /* Texte en gras */
+  color: black;         /* Couleur du texte des liens */
+  margin: 0 10px;       /* Espacement horizontal entre les liens */
+  text-decoration: none;/* Supprime le soulignement */
+  font-weight: bold;    /* Texte en gras */
 }
 
 nav a:hover {
@@ -69,23 +69,39 @@ nav a:hover {
 
 /* Footer */
 footer {
-  text-align: center; /* Centre le texte horizontalement */
-  font-weight: bold; /* Texte en gras */
-  position: relative; /* Pour positionner éventuellement des éléments en absolu */
+  text-align: center;   /* Centre le texte horizontalement */
+  font-weight: bold;    /* Texte en gras */
+  position: relative;   /* Pour positionner éventuellement des éléments en absolu */
 }
 
 /* Contenu principal */
 main {
-  padding: 2em; /* Espace interne autour du contenu */
-  text-align: center; /* Centre le texte et images */
+  padding: 2em;         /* Espace interne autour du contenu */
+  text-align: center;   /* Centre le texte et les images */
 }
 
 /* Styles pour écrans petits / mobile */
 @media (max-width: 768px) {
-  header .logo, header .logo-cchf {
-    height: 40px;      /* réduire la taille pour petits écrans */
-    max-width: 100px;  /* éviter de déformer le layout */
-    position: relative; /* pour que les logos s'empilent naturellement */
-    margin: 5px 0;     /* espace autour des logos */
+  header {
+    flex-direction: column;  /* Empile le header verticalement */
+    padding: 20px 0;         /* Réduit le padding */
+  }
+
+  header .logo,
+  header .logo-cchf {
+    position: relative;  /* Les logos s'empilent naturellement */
+    height: 40px;        /* Réduit la taille pour mobile */
+    max-width: 100px;    /* Largeur maximale pour mobile */
+    margin: 5px 0;       /* Espacement vertical */
+  }
+
+  header .header-center h1 {
+    font-size: 1.4em;    /* Texte plus petit sur mobile */
+  }
+
+  nav {
+    margin-top: 10px;
+    text-align: center;
   }
 }
+
