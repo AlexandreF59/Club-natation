@@ -8,18 +8,37 @@ body {
 header {
   background: linear-gradient(to bottom, #ffcc00 50%, #0057b8 50%);
   color: white;
-  padding: 20px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header .logo {
+  height: 60px; /* logo du club */
+}
+
+header .logo-cchf {
+  height: 60px; /* logo CCHF */
+}
+
+.header-center {
   text-align: center;
+  flex-grow: 1;
 }
 
 header h1 {
   margin: 0;
-  font-size: 2em;
+  font-size: 1.8em;
+}
+
+nav {
+  margin-top: 5px;
 }
 
 nav a {
   color: white;
-  margin: 0 15px;
+  margin: 0 10px;
   text-decoration: none;
   font-weight: bold;
 }
