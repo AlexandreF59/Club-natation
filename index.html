@@ -6,27 +6,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-  <!-- Logo club à gauche -->
-  <img src="images/logo 2025.png" alt="Logo du club" class="logo" style="height:100px">
-
-  <!-- Texte et navigation au centre -->
-  <div class="header-center">
-    <h1>Hauts de Flandre Natation</h1>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="natation_sportive.html">Natation sportive</a>
-      <a href="natation_synchronisee.html">Natation synchronisée</a>
-      <a href="documents.html">Documents</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </div>
-
-  <!-- Logo CCHF à droite -->
-  <a href="https://www.cchf.fr" target="_blank">
-    <img src="images/logo_cchf.png" alt="Logo de la CCHF" class="logo_cchf" style="height:100px">
-  </a>
-</header>
+  <div id="header"></div>
 
   <main>
     <h2>Bienvenue au Club Hauts de Flandre Natation !</h2>
@@ -34,8 +14,18 @@
     <img src="images/logo_2025.png" alt="Logo du club" width="300">
   </main>
 
-  <footer>
-    <p>© 2025 Hauts de Flandre Natation</p>
-  </footer>
+  <div id="footer"></div>
+  
+  <script>
+    // Charger le header
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('header').innerHTML = data; });
+
+    // Charger le footer
+    fetch('footer.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('footer').innerHTML = data; });
+  </script>
 </body>
 </html>
