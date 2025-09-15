@@ -3,13 +3,17 @@ body {
   margin: 0;
   padding: 0;
   background: linear-gradient(to right, 
-    #0057b8 0%, 
+    white 0%, 
+    white 10%,     
+    #0057b8 10%, 
     #0057b8 20%, 
     white 20%, 
     white 80%, 
     #ffcc00 80%, 
-    #ffcc00 100%
-  );
+    #ffcc00 90%
+    white 90%, 
+    white 100%, 
+    );
   color: black; /* texte en noir */
 }
 
