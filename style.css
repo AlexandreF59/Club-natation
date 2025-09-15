@@ -33,13 +33,13 @@ header .logo-cchf {
   position: absolute;        /* Placement à gauche/droite */
   top: 50%;                  /* Centre vertical */
   transform: translateY(-50%);
-  height: 60px;              /* Hauteur fixe */
+  height: 80px;              /* Hauteur fixe */
   width: auto;               /* Largeur proportionnelle */
   max-width: 120px;          /* Largeur maximale */
 }
 
-header .logo { left: 20px; }     /* Logo du club à gauche */
-header .logo-cchf { right: 20px; } /* Logo CCHF à droite */
+header .logo { left: 40px; }     /* Logo du club à gauche */
+header .logo-cchf { right: 40px; } /* Logo CCHF à droite */
 
 /* Titre et navigation centrés */
 header .header-center h1 {
