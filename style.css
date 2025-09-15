@@ -25,12 +25,26 @@ header, footer {
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* centre le contenu */
+  position: relative; /* pour positionner les logos */
+}
+
+/* Logo gauche */
+header .logo {
+  position: absolute;
+  left: 20px;
+}
+
+/* Logo droite */
+header .logo-cchf {
+  position: absolute;
+  right: 20px;
 }
 
 header h1 {
   margin: 0;
   font-size: 1.8em;
+  text-align: center;
 }
 
 nav a {
@@ -45,8 +59,9 @@ nav a:hover {
 }
 
 footer {
-  font-weight: bold;
   text-align: center;
+  font-weight: bold;
+  position: relative;
 }
 
 main {
