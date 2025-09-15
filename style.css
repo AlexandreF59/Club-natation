@@ -63,15 +63,16 @@ header nav a:hover {
    FOOTER
    =========================== */
 footer {
-  text-align: center;         /* Centre le texte */
-  font-weight: bold;          /* Texte en gras */
+  display: flex;             /* active flexbox */
+  justify-content: center;   /* centre horizontalement */
+  align-items: center;       /* centre verticalement */
+  font-weight: bold;
   padding: 20px 0;
-  position: relative;
   background: linear-gradient(to right,
-    white 0%, white 10%,      /* Blanc gauche */
-    #0057b8 10%, #0057b8 20%, /* Bleu */
-    white 20%, white 80%,      /* Centre blanc */
-    #ffcc00 80%, #ffcc00 90%,  /* Jaune */
+    white 0%, white 10%,
+    #0057b8 10%, #0057b8 20%,
+    white 20%, white 80%,
+    #ffcc00 80%, #ffcc00 90%,
     white 90%, white 100%
   );
 }
