@@ -6,10 +6,15 @@ body {
 }
 
 header {
-  background: #0077b6;
+  background: linear-gradient(to bottom, #ffcc00 50%, #0057b8 50%);
   color: white;
-  padding: 1em;
+  padding: 20px;
   text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2em;
 }
 
 nav a {
@@ -29,9 +34,9 @@ main {
 }
 
 footer {
-  background: #023e8a;
+  background: linear-gradient(to bottom, #ffcc00 50%, #0057b8 50%);
   color: white;
   text-align: center;
-  padding: 1em;
-  margin-top: 2em;
+  padding: 10px;
+  font-weight: bold;
 }
