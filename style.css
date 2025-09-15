@@ -22,7 +22,7 @@ header {
     white 0%, white 20%,      /* Blanc gauche */
     #0057b8 20%, #0057b8 30%, /* Bleu */
     white 30%, white 70%,      /* Centre blanc */
-    #ffcc00 70%, #ffcc00 800%,  /* Jaune */
+    #ffcc00 70%, #ffcc00 80%,  /* Jaune */
     white 80%, white 100%
   );
 }
