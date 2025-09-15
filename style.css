@@ -2,21 +2,19 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f0f8ff;
+  background: linear-gradient(to right, 
+    #0057b8 0%, 
+    #0057b8 20%, 
+    white 20%, 
+    white 80%, 
+    #ffcc00 80%, 
+    #ffcc00 100%
+  );
+  color: black; /* texte en noir */
 }
 
 header, footer {
-  background: linear-gradient(to right, 
-    #0057b8 0%,   /* bleu */
-    #0057b8 20%,  /* largeur bande gauche */
-    white 20%,    /* centre blanc */
-    white 80%,    /* centre blanc */
-    #ffcc00 80%,  /* largeur bande droite */
-    #ffcc00 100%  /* jaune */
-  );
-  color: black; /* texte noir au centre */
   padding: 15px 20px;
-  text-align: center;
 }
 
 header {
@@ -26,13 +24,12 @@ header {
 }
 
 header h1 {
-  margin: 0 auto;
+  margin: 0;
   font-size: 1.8em;
-  color: black; /* bien lisible */
 }
 
 nav a {
-  color: black; 
+  color: black;
   margin: 0 10px;
   text-decoration: none;
   font-weight: bold;
@@ -44,6 +41,7 @@ nav a:hover {
 
 footer {
   font-weight: bold;
+  text-align: center;
 }
 
 main {
@@ -51,3 +49,18 @@ main {
   text-align: center;
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  header img {
+    height: 40px;
+  }
+
+  nav {
+    margin-top: 10px;
+  }
+}
