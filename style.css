@@ -5,39 +5,34 @@ body {
   background: #f0f8ff;
 }
 
+header, footer {
+  background: linear-gradient(to right, 
+    #0057b8 0%,   /* bleu */
+    #0057b8 20%,  /* largeur bande gauche */
+    white 20%,    /* centre blanc */
+    white 80%,    /* centre blanc */
+    #ffcc00 80%,  /* largeur bande droite */
+    #ffcc00 100%  /* jaune */
+  );
+  color: black; /* texte noir au centre */
+  padding: 15px 20px;
+  text-align: center;
+}
+
 header {
-  background: linear-gradient(to bottom, #ffcc00 50%, #0057b8 50%);
-  color: white;
-  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-header .logo {
-  height: 60px; /* logo du club */
-}
-
-header .logo-cchf {
-  height: 60px; /* logo CCHF */
-}
-
-.header-center {
-  text-align: center;
-  flex-grow: 1;
-}
-
 header h1 {
-  margin: 0;
+  margin: 0 auto;
   font-size: 1.8em;
-}
-
-nav {
-  margin-top: 5px;
+  color: black; /* bien lisible */
 }
 
 nav a {
-  color: white;
+  color: black; 
   margin: 0 10px;
   text-decoration: none;
   font-weight: bold;
@@ -47,15 +42,12 @@ nav a:hover {
   text-decoration: underline;
 }
 
+footer {
+  font-weight: bold;
+}
+
 main {
   padding: 2em;
   text-align: center;
 }
 
-footer {
-  background: linear-gradient(to bottom, #ffcc00 50%, #0057b8 50%);
-  color: white;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-}
