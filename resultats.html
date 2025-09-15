@@ -51,36 +51,55 @@
 <div id="footer"></div>
 
 <script>
-fetch('data/resultats_csv_90111.csv')
+fetch('data/resultats.csv')
   .then(response => response.text())
   .then(text => {
-    // On supprime d'abord les retours chariot Windows et on découpe en lignes
-    const lines = text.replace(/\r/g, '').split('\n');
-    let table = '<table class="csv-table"><thead><tr>';
-    
-    // La première ligne contient les en-têtes
-    const headers = lines[0].split(';');
-    headers.forEach(header => table += `<th>${header.trim()}</th>`);
+    const lines = text.replace(/\r/g,'').split('\n');
+    const headers = lines[0].split(';').map(h => h.trim());
+
+    // Récupération des données
+    const data = lines.slice(1).filter(l => l.trim() !== '').map(line => line.split(';').map(c => c.trim()));
+
+    // Création du tableau
+    let table = '<table id="resultsTable" class="csv-table"><thead><tr>';
+    headers.forEach((header, i) => {
+      // Crée un select pour filtrer
+      const uniqueValues = [...new Set(data.map(row => row[i]))].sort();
+      let selectHTML = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
+      uniqueValues.forEach(val => selectHTML += `<option value="${val}">${val}</option>`);
+      selectHTML += `</select>`;
+      table += `<th>${header}<br>${selectHTML}</th>`;
+    });
     table += '</tr></thead><tbody>';
     
-    // On parcourt les lignes suivantes
-    for(let i = 1; i < lines.length; i++){
-      if(lines[i].trim() === '') continue; // ignore les lignes vides
-      const cells = lines[i].split(';');
+    data.forEach(row => {
       table += '<tr>';
-      cells.forEach(cell => table += `<td>${cell.trim()}</td>`);
+      row.forEach(cell => table += `<td>${cell}</td>`);
       table += '</tr>';
-    }
+    });
     
     table += '</tbody></table>';
     document.getElementById('tableContainer').innerHTML = table;
-  })
-  .catch(err => {
-    document.getElementById('tableContainer').innerHTML = 'Impossible de charger les résultats.';
-    console.error(err);
-  });
-</script>
 
+    // Filtrage par select
+    const filters = table.querySelectorAll('.colFilter');
+    filters.forEach(select => {
+      select.addEventListener('change', () => {
+        const rows = document.querySelectorAll('#resultsTable tbody tr');
+        rows.forEach(row => {
+          let show = true;
+          filters.forEach(f => {
+            const col = f.dataset.col;
+            const val = f.value;
+            if (val && row.cells[col].textContent !== val) show = false;
+          });
+          row.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  })
+  .catch(err => console.error(err));
+</script>
 </body>
 </html>
 
