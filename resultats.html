@@ -51,7 +51,7 @@
 <div id="footer"></div>
 
 <script>
-fetch('data/resultats.csv')
+fetch('data/resultats_csv_90111.csv')
   .then(response => response.text())
   .then(text => {
     const lines = text.replace(/\r/g,'').split('\n');
