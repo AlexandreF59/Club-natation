@@ -19,11 +19,11 @@ header {
   position: relative;           /* Permet de positionner les logos en absolu */
   padding: 20px 0;
   background: linear-gradient(to right,
-    white 0%, white 20%,      /* Blanc gauche */
-    #0057b8 20%, #0057b8 30%, /* Bleu */
-    white 30%, white 70%,      /* Centre blanc */
-    #ffcc00 70%, #ffcc00 80%,  /* Jaune */
-    white 80%, white 100%
+    white 0%, white 15%,      /* Blanc gauche */
+    #0057b8 15%, #0057b8 20%, /* Bleu */
+    white 20%, white 80%,      /* Centre blanc */
+    #ffcc00 80%, #ffcc00 85%,  /* Jaune */
+    white 85%, white 100%
   );
 }
 
@@ -69,11 +69,11 @@ footer {
   position: relative;           /* Permet de positionner les logos en absolu */
   padding: 20px 0;
   background: linear-gradient(to right,
-    white 0%, white 20%,      /* Blanc gauche */
-    #0057b8 20%, #0057b8 30%, /* Bleu */
-    white 30%, white 70%,      /* Centre blanc */
-    #ffcc00 70%, #ffcc00 80%,  /* Jaune */
-    white 80%, white 100%
+    white 0%, white 15%,      /* Blanc gauche */
+    #0057b8 15%, #0057b8 20%, /* Bleu */
+    white 20%, white 80%,      /* Centre blanc */
+    #ffcc00 80%, #ffcc00 85%,  /* Jaune */
+    white 85%, white 100%
   );
 }
 
