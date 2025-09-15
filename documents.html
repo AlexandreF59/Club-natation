@@ -6,15 +6,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Documents</h1>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="entrainements.html">Entraînements</a>
-      <a href="contact.html">Contact</a>
-      <a href="documents.html">Documents</a>
-    </nav>
-  </header>
+  <!-- Conteneur pour le header dynamique -->
+  <div id="header"></div>
 
   <main>
     <h2>Téléchargements</h2>
@@ -24,8 +17,19 @@
     <p>📑 <a href="docs/projet_sportif_2024_2028.pdf" target="_blank">Projet sportif (PDF)</a></p>
   </main>
 
-  <footer>
-    <p>© 2025 Hauts de Flandre Natation</p>
-  </footer>
+  <!-- Conteneur pour le footer dynamique -->
+  <footer id="footer"></footer>
+
+  <script>
+    // Charger le header
+    fetch('header.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('header').innerHTML = data; });
+
+    // Charger le footer
+    fetch('footer.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('footer').innerHTML = data; });
+  </script>
 </body>
 </html>
