@@ -36,12 +36,16 @@ header {
 header .logo {
   position: absolute; /* Position fixe par rapport au header */
   left: 20px; /* Décalage depuis le bord gauche */
+  height: 60px;       /* hauteur maximale */
+  max-width: 150px;   /* largeur maximale pour éviter que ça déborde */
 }
 
 /* Logo à droite */
 header .logo-cchf {
   position: absolute; /* Position fixe par rapport au header */
   right: 20px; /* Décalage depuis le bord droit */
+  height: 60px;       /* hauteur maximale */
+  max-width: 150px;   /* largeur maximale */
 }
 
 /* Titre principal dans le header */
@@ -78,16 +82,10 @@ main {
 
 /* Styles pour écrans petits / mobile */
 @media (max-width: 768px) {
-  header {
-    flex-direction: column; /* Empile les éléments du header verticalement */
-    text-align: center; /* Centre le contenu */
-  }
-
-  header img {
-    height: 40px; /* Taille réduite des logos sur mobile */
-  }
-
-  nav {
-    margin-top: 10px; /* Espacement entre nav et autres éléments */
+  header .logo, header .logo-cchf {
+    height: 40px;      /* réduire la taille pour petits écrans */
+    max-width: 100px;  /* éviter de déformer le layout */
+    position: relative; /* pour que les logos s'empilent naturellement */
+    margin: 5px 0;     /* espace autour des logos */
   }
 }
