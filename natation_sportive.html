@@ -67,33 +67,28 @@
   <footer id="footer"></footer>
 
   <script>
-    // Charger le header
-    fetch('header.html')
-      .then(response => response.text())
-      .then(data => { document.getElementById('header').innerHTML = data; });
+  // Charger le header et le footer dynamiquement
+  fetch('header.html')
+    .then(response => response.text())
+    .then(data => { document.getElementById('header').innerHTML = data; });
 
-    // Charger le footer
-    fetch('footer.html')
-      .then(response => response.text())
-      .then(data => { document.getElementById('footer').innerHTML = data; });
-    
-  // Charger le slider HTML et le JS
+  fetch('footer.html')
+    .then(response => response.text())
+    .then(data => { document.getElementById('footer').innerHTML = data; });
+
+  // Charger le slider HTML dynamiquement
   fetch('slider_natation_sportive.html')
-    .then(r => r.text())
-    .then(d => {
-      const sliderDiv = document.getElementById('slider');
-      sliderDiv.innerHTML = d;
-
-      // Créer le script slider.js et l'ajouter après l'insertion du HTML
-      const script = document.createElement('script');
-      script.src = 'slider.js';
-      script.onload = () => {
-        // Initialiser le slider si ton slider.js contient une fonction init
-        if (typeof initSlider === 'function') initSlider();
-      };
-      document.body.appendChild(script)
-      });
-  </script>
-</body>
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('slider').innerHTML = data;
+      // Aucun besoin d'ajouter slider.js ici, il est déjà inclus dans la page
+      // et s'initialisera automatiquement grâce au MutationObserver
+    })
+    .catch(err => console.error('Erreur chargement slider :', err));
+    </script>
+    <!-- Initialisation des sliders -->
+  <script src="slider.js"></script>
+  
+</body>  
 </html>
 
