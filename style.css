@@ -121,9 +121,9 @@ header .logo-cchf {
   position: absolute;        /* Placement à gauche/droite */
   top: 50%;                  /* Centre vertical */
   transform: translateY(-50%);
-  height: 100px;              /* Hauteur fixe */
+  height: 80px;              /* Hauteur fixe */
   width: auto;               /* Largeur proportionnelle */
-  max-width: 170px;          /* Largeur maximale */
+  max-width: 140px;          /* Largeur maximale */
 }
 
 header .logo { left: 40px; }     /* Logo du club à gauche */
