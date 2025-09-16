@@ -1,21 +1,34 @@
-let slideIndex = 0;
+// Fonction pour initialiser un slider
+function initSlider(container) {
+  let slides = container.querySelectorAll(".slides");
+  let currentIndex = 0;
 
-function showSlide(n) {
-  const slides = document.querySelectorAll(".slides");
-  if (slides.length === 0) return;
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.style.display = i === index ? "block" : "none";
+    });
+  }
 
-  slideIndex = (n + slides.length) % slides.length;
+  function changeSlide(step) {
+    currentIndex = (currentIndex + step + slides.length) % slides.length;
+    showSlide(currentIndex);
+  }
 
-  slides.forEach((s, i) => {
-    s.style.display = (i === slideIndex) ? "block" : "none";
-  });
+  // Boutons
+  const prev = container.querySelector(".prev");
+  const next = container.querySelector(".next");
+  if (prev && next) {
+    prev.addEventListener("click", () => changeSlide(-1));
+    next.addEventListener("click", () => changeSlide(1));
+  }
+
+  // Affiche la première image
+  showSlide(currentIndex);
 }
 
-function changeSlide(n) {
-  showSlide(slideIndex + n);
-}
-
+// Initialise tous les sliders présents sur la page
 document.addEventListener("DOMContentLoaded", () => {
-  showSlide(slideIndex);
-  setInterval(() => changeSlide(1), 5000); // défile auto toutes les 5s
+  document.querySelectorAll(".slideshow-container").forEach(container => {
+    initSlider(container);
+  });
 });
