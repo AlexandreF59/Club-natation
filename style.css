@@ -1,3 +1,25 @@
+.natation-sportive-intro {
+  max-width: 900px;           /* Limite la largeur pour une lecture confortable */
+  margin: 2em auto;           /* Centre horizontalement et espace vertical */
+  padding: 20px 30px;         /* Espace interne */
+  background-color: #f0f8ff;  /* Fond bleu très clair pour différencier la section */
+  border-left: 6px solid #0057b8; /* Bande bleue sur le côté */
+  border-radius: 8px;         /* Coins arrondis */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Ombre subtile */
+  line-height: 1.6;           /* Améliore la lisibilité */
+}
+
+.natation-sportive-intro h2 {
+  color: #0057b8;             /* Titre bleu */
+  text-align: center;         /* Centre le titre */
+  margin-bottom: 15px;
+}
+
+.natation-sportive-intro p {
+  color: #333;                /* Texte gris foncé pour le confort visuel */
+  margin-bottom: 12px;
+}
+
 .slideshow-container {
   position: relative;
   max-width: 800px;
