@@ -1,3 +1,38 @@
+.slideshow-container {
+  position: relative;
+  max-width: 800px;
+  margin: 20px auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.slides {
+  display: none;
+  width: 100%;
+}
+
+.prev, .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 12px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+
+.prev:hover, .next:hover {
+  background: rgba(0,0,0,0.8);
+}
+
 /* ===========================
    CORPS DE LA PAGE
    =========================== */
