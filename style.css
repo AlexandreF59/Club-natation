@@ -1,3 +1,32 @@
+.sponsors {
+  text-align: center;
+  margin: 3em auto;
+  max-width: 1000px;
+}
+
+.sponsors h2 {
+  margin-bottom: 1em;
+  color: #0057b8;
+}
+
+.sponsors-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.sponsors-logos a img {
+  max-height: 80px;   /* ajuste la hauteur des logos */
+  max-width: 180px;   /* limite la largeur */
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.sponsors-logos a img:hover {
+  transform: scale(1.1);
+}
+
 .intro-section {
   max-width: 900px;
   margin: 1.5em auto;
