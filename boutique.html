@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Boutique - Hauts de Flandre Natation</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .product {
+      max-width: 900px;
+      margin: 2em auto;
+      padding: 20px;
+      background: #f0f8ff;
+      border-left: 6px solid #0057b8;
+      border-right: 6px solid #ffcc00;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .product h3 {
+      text-align: center;
+      color: #0057b8;
+    }
+
+    .price {
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .slideshow-container {
+      position: relative;
+      max-width: 100%;
+      margin: 15px auto;
+    }
+
+    .slides {
+      width: 100%;
+      display: none;
+      border-radius: 6px;
+    }
+
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 8px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      user-select: none;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+
+    .product p {
+      line-height: 1.5;
+      color: #333;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+
+  <main>
+    <h2 style="text-align:center;">Notre boutique</h2>
+    <p style="text-align:center;">Découvrez nos articles disponibles à la vente. Pour commander, contactez-nous directement.</p>
+
+    <!-- Produit 1 -->
+    <div class="product">
+      <h3>Bonnet du club</h3>
+      <div class="slideshow-container">
+        <img class="slides" src="images_boutique/bonnet1.jpg" alt="Bonnet du club - vue 1">
+        <img class="slides" src="images_boutique/bonnet2.jpg" alt="Bonnet du club - vue 2">
+        <a class="prev">❮</a>
+        <a class="next">❯</a>
+      </div>
+      <div class="price">10 €</div>
+      <p>Bonnet en silicone aux couleurs du club. Taille unique. Idéal pour les entraînements et compétitions.</p>
+    </div>
+
+    <!-- Produit 2 -->
+    <div class="product">
+      <h3>T-shirt Hauts de Flandre Natation</h3>
+      <div class="slideshow-container">
+        <img class="slides" src="images_boutique/tshirt1.jpg" alt="T-shirt du club - face">
+        <img class="slides" src="images_boutique/tshirt2.jpg" alt="T-shirt du club - dos">
+        <a class="prev">❮</a>
+        <a class="next">❯</a>
+      </div>
+      <div class="price">15 €</div>
+      <p>T-shirt officiel du club, confortable et respirant. Disponible en plusieurs tailles (S à XL).</p>
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="slider.js"></script>
+  <script>
+    // Charger header et footer
+    fetch('header.html')
+      .then(r => r.text())
+      .then(d => { document.getElementById('header').innerHTML = d; });
+
+    fetch('footer.html')
+      .then(r => r.text())
+      .then(d => { document.getElementById('footer').innerHTML = d; });
+
+    // Initialiser les sliders
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".product .slideshow-container").forEach(container => {
+        initSlider(container);
+      });
+    });
+  </script>
+</body>
+</html>
