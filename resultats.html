@@ -4,15 +4,24 @@
   <meta charset="UTF-8">
   <title>Résultats - Hauts de Flandre Natation</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .csv-table { border-collapse: collapse; width: 90%; max-width: 1200px; margin: 1.2em auto; background:#f9f9f9; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
-    .csv-table th, .csv-table td { border:1px solid #ccc; padding:8px 10px; text-align:left; vertical-align:middle; }
-    .csv-table th { background:#0057b8; color:#fff; text-align:center; }
-    .csv-table tr:nth-child(even){ background:#e6f0fa; } .csv-table tr:hover{ background:#d0e4ff; }
-    h2 { text-align:center; margin-top:1.2em; }
-    .small { display:block; font-size:0.85em; color:#333; margin-top:4px; }
-    .no-records { text-align:center; color:#666; margin:0.6em 0 1.2em 0; }
-    select.colFilter { margin-top:5px; width:100%; }
+<style>
+  .csv-table { border-collapse: collapse; width: 90%; max-width: 1200px; margin: 1.2em auto; background:#f9f9f9; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+  .csv-table th, .csv-table td { border:1px solid #ccc; padding:8px 10px; vertical-align:middle; }
+  .csv-table th { background:#0057b8; color:#fff; }
+  .csv-table tr:nth-child(even){ background:#e6f0fa; } .csv-table tr:hover{ background:#d0e4ff; }
+  h2 { text-align:center; margin-top:1.2em; }
+  .small { display:block; font-size:0.85em; color:#333; margin-top:4px; }
+  .no-records { text-align:center; color:#666; margin:0.6em 0 1.2em 0; }
+  select.colFilter { margin-top:5px; width:100%; }
+
+  /* Centrage uniquement pour les tableaux de records */
+  #recordsFemmes table.csv-table th,
+  #recordsFemmes table.csv-table td,
+  #recordsHommes table.csv-table th,
+  #recordsHommes table.csv-table td {
+    text-align: center;
+  }
+  
     @media (max-width:900px){ .csv-table{ width:95%; font-size:0.9em; } }
   </style>
 </head>
