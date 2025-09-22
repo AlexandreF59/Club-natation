@@ -1,3 +1,16 @@
+<script>
+(function() {
+  console.log("⚡ Test GoatCounter lancé...");
+  var s = document.createElement("script");
+  s.src = "https://gc.zgo.at/count.js";
+  s.async = true;
+  s.dataset.goatcounter = "https://clubhautsdeflandrenatation.goatcounter.com/count";
+  s.onload = () => console.log("✅ GoatCounter chargé !");
+  s.onerror = () => console.error("❌ Erreur de chargement GoatCounter");
+  document.body.appendChild(s);
+})();
+</script>
+
 <header>
   <!-- Logo du club à gauche -->
   <img src="images/logo_2025.png" alt="Logo du club" class="logo">
