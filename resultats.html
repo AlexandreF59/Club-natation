@@ -5,15 +5,37 @@
   <title>Résultats - Hauts de Flandre Natation</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .csv-table { border-collapse: collapse; width: 90%; max-width: 1200px; margin: 1.2em auto; background:#f9f9f9; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
-    .csv-table th, .csv-table td { border:1px solid #ccc; padding:8px 10px; text-align:center; }
-    .csv-table th { background:#0057b8; color:#fff; }
-    .csv-table tr:nth-child(even){ background:#e6f0fa; } .csv-table tr:hover{ background:#d0e4ff; }
-    h2 { text-align:center; margin-top:1.2em; }
-    .small { font-size:0.85em; color:#333; display:block; margin-top:4px; }
-    .no-records { text-align:center; color:#666; margin:0.6em 0 1.2em 0; }
-    @media (max-width:900px){ .csv-table{ width:95%; font-size:0.9em; } }
-    main { padding-bottom:2em; }
+    .csv-table {
+      border-collapse: collapse;
+      width: 90%;
+      max-width: 1200px;
+      margin: 2em auto;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .csv-table th, .csv-table td {
+      border: 1px solid #ccc;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .csv-table th {
+      background-color: #0057b8;
+      color: white;
+    }
+    .csv-table tr:nth-child(even) {
+      background-color: #e6f0fa;
+    }
+    .csv-table tr:hover {
+      background-color: #d0e4ff;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 2em;
+    }
+    select.colFilter {
+      margin-top: 5px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -22,15 +44,20 @@
   <main>
     <section class="intro-section">
       <h2>Résultats du club</h2>
-      <p>Retrouvez ici les performances de nos nageurs, extraites des résultats officiels de la
-         <a href="https://www.ffnatation.fr" target="_blank">FFN</a>.</p>
+      <p>
+        Retrouvez ici les performances de nos nageurs, extraites des résultats officiels de la 
+        <a href="https://www.ffnatation.fr" target="_blank"><strong>Fédération Française de Natation (FFN)</strong></a>. 
+      </p>
+      <p>
+        Ces données reflètent les compétitions auxquelles nos athlètes ont participé et illustrent leurs progrès et leurs succès tout au long de la saison.
+      </p>
     </section>
 
     <h2>Records Féminins</h2>
-    <div id="recordsFemmes">Chargement...</div>
+    <div id="recordsFem"></div>
 
     <h2>Records Masculins</h2>
-    <div id="recordsHommes">Chargement...</div>
+    <div id="recordsMas"></div>
 
     <h2>Tous les résultats</h2>
     <div id="tableContainer">Chargement des résultats...</div>
@@ -38,210 +65,105 @@
 
   <footer id="footer"></footer>
 
-  <!-- GoatCounter si présent -->
-  <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+  <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count"
+          async src="https://gc.zgo.at/count.js"></script>
 
   <script>
-  /* ---------- UTILITAIRES ---------- */
-  function norm(s){ return (s===undefined||s===null)?'':String(s).trim().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
-  function normLower(s){ return norm(s).toLowerCase(); }
-  function normSexLower(s){
-    const n = normLower(s);
-    if(!n) return '';
-    if(n.includes('fem') || n==='f' || n.includes('dame') || n.includes('feminin')) return 'feminin';
-    if(n.includes('masc') || n==='m' || n.includes('hom') || n.includes('masculin')) return 'masculin';
-    return '';
-  }
-  function timeToSec(t){
-    if(!t) return Infinity;
-    const s = String(t).trim().replace(/\s+/g,'').replace(',', '.');
-    if(s==='') return Infinity;
-    const parts = s.split(':');
-    if(parts.length === 1){
-      const v = parseFloat(parts[0]);
-      return isNaN(v) ? Infinity : v;
-    } else if(parts.length === 2){
-      const m = parseFloat(parts[0])||0;
-      const sec = parseFloat(parts[1])||0;
-      return m*60 + sec;
-    } else if(parts.length === 3){
-      const h = parseFloat(parts[0])||0;
-      const m = parseFloat(parts[1])||0;
-      const sec = parseFloat(parts[2])||0;
-      return h*3600 + m*60 + sec;
-    }
-    return Infinity;
-  }
+    // Charger header et footer
+    fetch('header.html').then(r => r.text()).then(d => { document.getElementById('header').innerHTML = d; });
+    fetch('footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d; });
 
-  // ordre voulu pour les catégories
-  const preferredOrder = ["avenirs","benjamins","juniors","seniors",
-    "master c1","master c2","master c3","master c4","master c5","master c6","master c7","master c8","master c9"];
+    // Charger et traiter le CSV
+    fetch('data/resultats_csv.csv')
+      .then(r => r.text())
+      .then(text => {
+        const lines = text.replace(/\r/g, '').split('\n').filter(l => l.trim() !== '');
+        const headers = lines[0].split(';').map(h => h.trim());
+        const data = lines.slice(1).map(l => l.split(';').map(c => c.trim()));
 
-  // trouve index d'une colonne à partir des textes d'entête (mots-clés)
-  function findHeaderIndex(headersNorm, keys){
-    for(let i=0;i<headersNorm.length;i++){
-      for(const k of keys){
-        if(headersNorm[i].includes(k)) return i;
-      }
-    }
-    return -1;
-  }
-
-  /* ---------- charger header/footer ---------- */
-  fetch('header.html').then(r=>r.text()).then(d=>document.getElementById('header').innerHTML=d).catch(()=>{});
-  fetch('footer.html').then(r=>r.text()).then(d=>document.getElementById('footer').innerHTML=d).catch(()=>{});
-
-  /* ---------- Charger CSV et construire tableaux ---------- */
-  fetch('data/resultats_csv.csv')
-    .then(r => r.text())
-    .then(text => {
-      const rawLines = text.replace(/\r/g,'').split('\n').filter(l => l.trim() !== '');
-      if(rawLines.length < 1){
-        document.getElementById('tableContainer').textContent = 'Fichier CSV vide ou introuvable.';
-        return;
-      }
-
-      const headers = rawLines[0].split(';').map(h => h.trim());
-      const headersNorm = headers.map(h => normLower(h));
-
-      // détecter colonnes à partir des entêtes
-      const idxEpreuve = findHeaderIndex(headersNorm, ['epreuve','epreuve','event','epreuve','epreu']);
-      const idxGenre   = findHeaderIndex(headersNorm, ['genre','sexe','sex','genre;']);
-      const idxNom    = findHeaderIndex(headersNorm, ['nom prenom','nom','nageur','athlete','name']);
-      const idxTemps  = findHeaderIndex(headersNorm, ['temps','time','chrono','result']);
-      const idxCateg  = findHeaderIndex(headersNorm, ['categorie','catégorie','cat','category']);
-      // fallback (indices connus d'après ton CSV)
-      const IDX_EPREUVE = idxEpreuve >= 0 ? idxEpreuve : 0;
-      const IDX_GENRE   = idxGenre   >= 0 ? idxGenre   : 1;
-      const IDX_NOM     = idxNom     >= 0 ? idxNom     : 2;
-      const IDX_TEMPS   = idxTemps   >= 0 ? idxTemps   : 4;
-      const IDX_CATEG   = idxCateg   >= 0 ? idxCateg   : 7;
-
-      // lecture lignes -> objets robustes
-      const rows = rawLines.slice(1).map(line => {
-        const cols = line.split(';').map(c => c.trim());
-        while(cols.length < 10) cols.push('');
-        return {
-          raw: cols,
-          epreuve: cols[IDX_EPREUVE]||'',
-          genreRaw: cols[IDX_GENRE]||'',
-          genreNorm: normSexLower(cols[IDX_GENRE]),
-          nom: cols[IDX_NOM]||'',
-          tempsRaw: cols[IDX_TEMPS]||'',
-          tempsSec: timeToSec(cols[IDX_TEMPS]),
-          categorie: cols[IDX_CATEG]||''
-        };
-      });
-
-      // TABLEAU PRINCIPAL (simple affichage)
-      let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
-      headers.forEach(h => tableHTML += `<th>${h}</th>`);
-      tableHTML += '</tr></thead><tbody>';
-      rows.forEach(r => {
-        tableHTML += '<tr>';
-        headers.forEach((_,i) => tableHTML += `<td>${r.raw[i]||''}</td>`);
-        tableHTML += '</tr>';
-      });
-      tableHTML += '</tbody></table>';
-      document.getElementById('tableContainer').innerHTML = tableHTML;
-
-      // listes globales
-      const epreuvesAll = Array.from(new Set(rows.map(r => r.epreuve).filter(Boolean))).sort();
-      const categoriesAll = Array.from(new Set(rows.map(r => r.categorie).filter(Boolean)));
-
-      // calcul records pour un sexe donné (strict)
-      function computeRecordsForSex(sexNorm){
-        const records = {}; // records[epreuve][categorie] = {nom, tempsRaw, sec}
-        // parcourir lignes
-        rows.forEach(r => {
-          if(!r.epreuve) return;
-          if(r.genreNorm !== sexNorm) return; // filtrage strict
-          const ep = r.epreuve;
-          const cat = r.categorie || '—';
-          if(!records[ep]) records[ep] = {};
-          // temps valide ?
-          const sec = r.tempsSec;
-          if(sec === Infinity) return;
-          if(!records[ep][cat] || records[ep][cat].sec > sec){
-            records[ep][cat] = { nom: r.nom, temps: r.tempsRaw, sec: sec };
-          }
+        // Tableau complet avec filtres
+        let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
+        headers.forEach((h, i) => {
+          const uniqueValues = [...new Set(data.map(row => row[i]))].sort();
+          let selectHTML = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
+          uniqueValues.forEach(val => { selectHTML += `<option value="${val}">${val}</option>`; });
+          selectHTML += '</select>';
+          tableHTML += `<th>${h}<br>${selectHTML}</th>`;
         });
-        return records;
-      }
+        tableHTML += '</tr></thead><tbody>';
+        data.forEach(row => {
+          tableHTML += '<tr>';
+          row.forEach(cell => tableHTML += `<td>${cell}</td>`);
+          tableHTML += '</tr>';
+        });
+        tableHTML += '</tbody></table>';
+        document.getElementById('tableContainer').innerHTML = tableHTML;
 
-      const recF = computeRecordsForSex('feminin');
-      const recM = computeRecordsForSex('masculin');
+        // Activation filtres
+        const filters = document.querySelectorAll('.colFilter');
+        filters.forEach(select => {
+          select.addEventListener('change', () => {
+            const rows = document.querySelectorAll('#resultsTable tbody tr');
+            rows.forEach(row => {
+              let show = true;
+              filters.forEach(f => {
+                const col = f.dataset.col;
+                const val = f.value;
+                if (val && row.cells[col].textContent !== val) show = false;
+              });
+              row.style.display = show ? '' : 'none';
+            });
+          });
+        });
 
-      // trouver catégories ayant au moins un record pour ce sexe
-      function catsWithRecords(records){
-        const s = new Set();
-        for(const ep in records){
-          const byCat = records[ep];
-          for(const cat in byCat){
-            if(byCat[cat] && byCat[cat].sec !== undefined && byCat[cat].sec !== Infinity) s.add(cat);
-          }
+        // Records (simplifié : on garde la version qui marche déjà)
+        const sexeIndex = 1, nomIndex = 2, tempsIndex = 4, epreuveIndex = 0, categorieIndex = 7;
+        const categoriesOrder = ["Avenirs", "Benjamins", "Juniors", "Seniors", "Master C1", "Master C2", "Master C3", "Master C4", "Master C5", "Master C6", "Master C7", "Master C8", "Master C9", "Master C10"];
+        const recordsFem = {}, recordsMas = {};
+
+        function parseTime(t) {
+          const parts = t.split(':').map(Number);
+          return parts.length === 2 ? parts[0] * 60 + parts[1] : parts[0];
         }
-        return Array.from(s);
-      }
 
-      // ordre final des catégories : preferred first, puis autres alphabétiques
-      function orderCategoriesForDisplay(catsPresent){
-        const presentNorm = catsPresent.map(c => ({disp:c, norm: normLower(c)}));
-        const ordered = [];
-        preferredOrder.forEach(pref => {
-          const found = presentNorm.find(x => x.norm === pref);
-          if(found) ordered.push(found.disp);
-        });
-        // add remaining that are present but not in preferredOrder
-        presentNorm.forEach(x => {
-          if(!ordered.includes(x.disp)) ordered.push(x.disp);
-        });
-        return ordered;
-      }
+        data.forEach(row => {
+          const epreuve = row[epreuveIndex];
+          const genre = row[sexeIndex];
+          const nom = row[nomIndex];
+          const temps = row[tempsIndex];
+          const cat = row[categorieIndex];
+          if (!epreuve || !genre || !nom || !temps || !cat) return;
+          if (!categoriesOrder.includes(cat)) return;
 
-      // génère HTML tableau records (n'affiche que catégories qui ont au moins un record)
-      function makeRecordsTable(records){
-        const catsPresent = catsWithRecords(records);
-        if(!catsPresent.length) return '<p class="no-records">Aucun record trouvé pour ce sexe.</p>';
-        const catsOrdered = orderCategoriesForDisplay(catsPresent);
-        // limiter aux catégories qui ont des records (déjà fait) et construire tableau
-        let html = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
-        catsOrdered.forEach(c => html += `<th>${c}</th>`);
-        html += '</tr></thead><tbody>';
-        // on n'affiche que les épreuves qui ont au moins un record pour ce sex
-        const epreuvesWithRecord = epreuvesAll.filter(ep => {
-          const byCat = records[ep] || {};
-          return Object.keys(byCat).some(cat => byCat[cat] && byCat[cat].sec !== undefined && byCat[cat].sec !== Infinity);
+          const target = (genre === "Feminin") ? recordsFem : recordsMas;
+          if (!target[epreuve]) target[epreuve] = {};
+          if (!target[epreuve][cat] || parseTime(temps) < parseTime(target[epreuve][cat].temps)) {
+            target[epreuve][cat] = { nom, temps };
+          }
         });
-        if(epreuvesWithRecord.length === 0) {
-          html += '<tr><td colspan="'+(catsOrdered.length+1)+'">Aucun record trouvé.</td></tr>';
-        } else {
-          epreuvesWithRecord.forEach(ep => {
-            html += `<tr><td style="text-align:left">${ep}</td>`;
-            catsOrdered.forEach(cat => {
-              const c = (records[ep] && records[ep][cat]) ? records[ep][cat] : null;
-              if(c) html += `<td>${c.temps}<span class="small">${c.nom}</span></td>`;
-              else html += '<td>—</td>';
+
+        function buildRecordsTable(records) {
+          let html = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
+          categoriesOrder.forEach(cat => { if (Object.values(records).some(r => r[cat])) html += `<th>${cat}</th>`; });
+          html += '</tr></thead><tbody>';
+          for (const epreuve in records) {
+            html += `<tr><td>${epreuve}</td>`;
+            categoriesOrder.forEach(cat => {
+              html += records[epreuve][cat] ? `<td>${records[epreuve][cat].temps} (${records[epreuve][cat].nom})</td>` : '<td></td>';
             });
             html += '</tr>';
-          });
+          }
+          html += '</tbody></table>';
+          return html;
         }
-        html += '</tbody></table>';
-        return html;
-      }
 
-      // insérer tables
-      document.getElementById('recordsFemmes').innerHTML = makeRecordsTable(recF);
-      document.getElementById('recordsHommes').innerHTML  = makeRecordsTable(recM);
-
-    })
-    .catch(err => {
-      console.error('Erreur lecture CSV:', err);
-      document.getElementById('tableContainer').textContent = 'Erreur lors du chargement des résultats.';
-      document.getElementById('recordsFemmes').textContent = '';
-      document.getElementById('recordsHommes').textContent = '';
-    });
+        document.getElementById('recordsFem').innerHTML = buildRecordsTable(recordsFem);
+        document.getElementById('recordsMas').innerHTML = buildRecordsTable(recordsMas);
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('tableContainer').textContent = 'Erreur lors du chargement des résultats.';
+      });
   </script>
 </body>
 </html>
-
