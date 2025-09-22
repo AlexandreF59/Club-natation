@@ -27,11 +27,6 @@
     h2 { text-align: center; margin-top: 1.5em; }
     .small { font-size: 0.85em; color: #333; }
     .no-records { text-align:center; color:#666; margin:0.8em 0 1.5em 0; }
-    @media (max-width: 900px) {
-      .csv-table { width: 95%; font-size: 0.9em; }
-    }
-    /* un peu d'espacement pour sections */
-    #recordsFemmes, #recordsHommes, #tableContainer { margin-bottom: 2em; }
   </style>
 </head>
 <body>
@@ -58,198 +53,111 @@
 
   <footer id="footer"></footer>
 
-  <!-- GoatCounter si besoin -->
   <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count"
           async src="https://gc.zgo.at/count.js"></script>
 
   <script>
-  /* ---------------------------
-     Fonctions utilitaires
-     --------------------------- */
-
-  // normalise texte : supprime accents, trim, minuscules
+  // --- utilitaires
   function normalizeText(s) {
-    if (s === undefined || s === null) return '';
-    return String(s).trim()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
+    return String(s||'').trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   }
-
-  // détecte si champ sexe correspond à féminin / masculin
-  function normalizeSexFieldRaw(s) {
+  function normalizeSex(s) {
     const n = normalizeText(s);
-    if (!n) return '';
-    if (n.includes('fem') || n === 'f' || n.includes('femin')) return 'Feminin';
-    if (n.includes('masc') || n.includes('hom') || n === 'm' || n.includes('masculin')) return 'Masculin';
-    return s; // retourne brut si impossible
+    if (n.includes('fem')) return 'Feminin';
+    if (n.includes('masc') || n.includes('hom')) return 'Masculin';
+    return '';
   }
-
-  // convertit un temps texte en secondes (gère 1:23.45, 01:23,45, 83.45)
   function parseTimeToSeconds(t) {
     if (!t) return Infinity;
-    const s = String(t).trim().replace(/\s/g,'').replace(',', '.');
-    if (s === '') return Infinity;
-    const parts = s.split(':').map(p => p.trim());
-    if (parts.length === 1) {
-      const v = parseFloat(parts[0]);
-      return isNaN(v) ? Infinity : v;
-    } else if (parts.length === 2) {
-      const mins = parseFloat(parts[0]) || 0;
-      const secs = parseFloat(parts[1]) || 0;
-      return mins*60 + secs;
-    } else if (parts.length === 3) {
-      const h = parseFloat(parts[0]) || 0;
-      const m = parseFloat(parts[1]) || 0;
-      const sec = parseFloat(parts[2]) || 0;
-      return h*3600 + m*60 + sec;
-    }
+    const s = t.trim().replace(',', '.');
+    const parts = s.split(':').map(x => parseFloat(x));
+    if (parts.some(isNaN)) return Infinity;
+    if (parts.length === 1) return parts[0];
+    if (parts.length === 2) return parts[0]*60 + parts[1];
+    if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
     return Infinity;
   }
 
-  // affiche texte en sécurité
-  function safeText(t) { return (t === undefined || t === null) ? '' : String(t); }
+  // ordre de colonnes souhaité
+  const categoryOrder = [
+    "Avenirs", "Benjamins", "Juniors", "Seniors",
+    "Master C1", "Master C2", "Master C3", "Master C4",
+    "Master C5", "Master C6", "Master C7", "Master C8", "Master C9"
+  ];
 
-  // normalisation d'en-tête pour trouver colonne par mot-clé
-  function normHeaderKey(h) {
-    return normalizeText(h).replace(/\s+/g,' ');
+  function orderCategories(allCats, records, epreuves) {
+    // garder uniquement celles qui ont au moins un résultat
+    const catsWithRecords = allCats.filter(cat => {
+      return epreuves.some(ep => records[ep] && records[ep][cat]);
+    });
+    // ordonner selon liste de référence puis rajouter les autres
+    const ordered = categoryOrder.filter(c => catsWithRecords.includes(c));
+    const extras = catsWithRecords.filter(c => !categoryOrder.includes(c)).sort();
+    return [...ordered, ...extras];
   }
 
-  // trouve la première colonne dont l'entête contient un des mots-clés
-  function findHeaderIndex(headersNorm, keywords) {
-    for (let i=0;i<headersNorm.length;i++) {
-      for (const k of keywords) {
-        if (headersNorm[i].includes(k)) return i;
-      }
-    }
-    return -1;
-  }
+  // --- charger header/footer
+  fetch('header.html').then(r=>r.text()).then(d=>document.getElementById('header').innerHTML=d);
+  fetch('footer.html').then(r=>r.text()).then(d=>document.getElementById('footer').innerHTML=d);
 
-  /* ---------------------------
-     Charger header/footer (ton code)
-     --------------------------- */
-  fetch('header.html').then(r => r.text()).then(d => { document.getElementById('header').innerHTML = d; }).catch(()=>{});
-  fetch('footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d; }).catch(()=>{});
-
-  /* ---------------------------
-     Charger CSV et construire tableaux
-     --------------------------- */
+  // --- charger CSV
   fetch('data/resultats_csv.csv')
     .then(r => r.text())
     .then(text => {
-      // split robust
-      const rawLines = text.replace(/\r/g,'').split('\n').filter(l => l.trim() !== '');
-      if (!rawLines.length) {
-        document.getElementById('tableContainer').textContent = 'Fichier CSV vide ou introuvable.';
-        return;
-      }
+      const lines = text.replace(/\r/g,'').split('\n').filter(l=>l.trim()!=='');
+      const headers = lines[0].split(';').map(h=>h.trim());
+      const data = lines.slice(1).map(l => l.split(';').map(c=>c.trim()));
 
-      // en-tête et lignes
-      const headers = rawLines[0].split(';').map(h => h.trim());
-      const headersNorm = headers.map(h => normHeaderKey(h || ''));
+      // indices selon ton CSV
+      const IDX_EPREUVE = 0;
+      const IDX_SEXE = 2;
+      const IDX_NOM = 3;
+      const IDX_TEMPS = 5;
+      const IDX_CATEG = 8;
 
-      // Matrice de données (garantie longueur >= 9 pour éviter index undefined)
-      const data = rawLines.slice(1).map(line => {
-        const cols = line.split(';').map(c => c.trim());
-        while (cols.length < 10) cols.push('');
-        return cols;
-      });
-
-      // ---- détecter indices (essayer de s'appuyer sur les en-têtes)
-      // mots clés probables (français / anglais)
-      const idxEpreuve = findHeaderIndex(headersNorm, ['epreuve','epreuve','epreuve/','epreuve ' ,'epreuve','event','epreuve;']);
-      const idxNom    = findHeaderIndex(headersNorm, ['nom prenom','nom','nageur','athlete','name']);
-      const idxSexe   = findHeaderIndex(headersNorm, ['sexe','genre','sex','sex/genre']);
-      const idxTemps  = findHeaderIndex(headersNorm, ['temps','time','chrono','result']);
-      const idxCateg  = findHeaderIndex(headersNorm, ['categorie','categorie_age','cat','category','catégorie']);
-      const idxDate   = findHeaderIndex(headersNorm, ['date']);
-      const idxAnnee  = findHeaderIndex(headersNorm, ['annee','annee naissance','annee_naissance','annee de naissance','annee_naiss']);
-
-      // fallback si non trouvé : utiliser indices usuels (1-based -> 0-based guessed)
-      // Ces valeurs sont des "meilleures estimations" suivant ton description initiale.
-      const fallback = {
-        epreuve: 0,
-        // on met sexe 2 (troisième colonne) seulement si detection a échoué
-        sexe: 2,
-        nom: 3,
-        temps: 5,
-        categorie: 8
-      };
-
-      const IDX_EPREUVE = idxEpreuve >= 0 ? idxEpreuve : fallback.epreuve;
-      const IDX_NOM     = idxNom    >= 0 ? idxNom    : fallback.nom;
-      const IDX_SEXE    = idxSexe   >= 0 ? idxSexe   : fallback.sexe;
-      const IDX_TEMPS   = idxTemps  >= 0 ? idxTemps  : fallback.temps;
-      const IDX_CATEG   = idxCateg  >= 0 ? idxCateg  : fallback.categorie;
-
-      console.log('Colonnes détectées -> epreuve:', IDX_EPREUVE, 'nom:', IDX_NOM, 'sexe:', IDX_SEXE, 'temps:', IDX_TEMPS, 'categorie:', IDX_CATEG);
-
-      // ---- construire TABLEAU GENERAL (avec filtres)
+      // tableau complet
       let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
-      headers.forEach((h,i) => {
-        const uniqueValues = [...new Set(data.map(row => safeText(row[i]) || ''))].filter(v => v !== '').sort();
-        let selectHTML = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
-        uniqueValues.forEach(val => selectHTML += `<option value="${val}">${val}</option>`);
-        selectHTML += '</select>';
-        tableHTML += `<th>${safeText(h)}<br>${selectHTML}</th>`;
-      });
+      headers.forEach((h,i) => tableHTML += `<th>${h}</th>`);
       tableHTML += '</tr></thead><tbody>';
       data.forEach(row => {
-        tableHTML += '<tr>';
-        for (let i=0;i<headers.length;i++) tableHTML += `<td>${safeText(row[i])}</td>`;
-        tableHTML += '</tr>';
+        tableHTML += '<tr>' + row.map(c=>`<td>${c}</td>`).join('') + '</tr>';
       });
       tableHTML += '</tbody></table>';
       document.getElementById('tableContainer').innerHTML = tableHTML;
 
-      // ---- préparer listes d'épreuves et catégories (globales, pour cohérence horizontale)
-      const epreuvesSet = new Set();
-      const categoriesSet = new Set();
-      data.forEach(row => {
-        const e = safeText(row[IDX_EPREUVE]);
-        const c = safeText(row[IDX_CATEG]) || '—';
-        if (e) epreuvesSet.add(e);
-        if (c) categoriesSet.add(c);
-      });
-      const epreuves = Array.from(epreuvesSet).sort();
-      const categories = Array.from(categoriesSet).sort();
+      // listes globales
+      const epreuves = [...new Set(data.map(r => r[IDX_EPREUVE]))].filter(Boolean).sort();
+      const categories = [...new Set(data.map(r => r[IDX_CATEG]))].filter(Boolean);
 
-      // ---- calcul records pour chaque sexe ('Feminin'/'Masculin')
-      function computeRecordsForSex(targetSexLabel) {
-        // records[epreuve][categorie] = {nom, temps, sec}
+      function computeRecordsForSex(sexWanted) {
         const records = {};
-        epreuves.forEach(e => records[e] = {}); // initialise pour toutes épreuves
-        data.forEach(row => {
-          const epreuve = safeText(row[IDX_EPREUVE]);
-          const sexeRaw = safeText(row[IDX_SEXE]);
-          const sexe = normalizeSexFieldRaw(sexeRaw);
-          const nom = safeText(row[IDX_NOM]);
-          const temps = safeText(row[IDX_TEMPS]);
-          const categorie = safeText(row[IDX_CATEG]) || '—';
-          if (!epreuve) return;
-          if (sexe !== targetSexLabel) return;
-          const sec = parseTimeToSeconds(temps);
-          if (!records[epreuve][categorie] || records[epreuve][categorie].sec > sec) {
-            records[epreuve][categorie] = { nom, temps, sec };
+        epreuves.forEach(ep => records[ep] = {});
+        data.forEach(r => {
+          const ep = r[IDX_EPREUVE];
+          const sex = normalizeSex(r[IDX_SEXE]);
+          if (sex !== sexWanted) return;
+          const nom = r[IDX_NOM];
+          const t = r[IDX_TEMPS];
+          const cat = r[IDX_CATEG];
+          const sec = parseTimeToSeconds(t);
+          if (!records[ep][cat] || records[ep][cat].sec > sec) {
+            records[ep][cat] = {nom, temps:t, sec};
           }
         });
         return records;
       }
 
-      const recF = computeRecordsForSex('Feminin');
-      const recM = computeRecordsForSex('Masculin');
-
-      function makeRecordsTableHtml(records) {
-        // si pas de categories (rare), afficher message
-        if (!categories.length || !epreuves.length) return '<p class="no-records">Aucune donnée de records trouvée.</p>';
+      function makeRecordsTable(records) {
+        const cats = orderCategories(categories, records, epreuves);
+        if (!cats.length) return '<p class="no-records">Aucun record trouvé</p>';
         let html = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
-        categories.forEach(cat => html += `<th>${cat}</th>`);
+        cats.forEach(c => html += `<th>${c}</th>`);
         html += '</tr></thead><tbody>';
         epreuves.forEach(ep => {
           html += `<tr><td style="text-align:left">${ep}</td>`;
-          categories.forEach(cat => {
-            const cell = (records[ep] && records[ep][cat]) ? records[ep][cat] : null;
-            if (cell) html += `<td>${cell.temps}<br><small class="small">${cell.nom}</small></td>`;
-            else html += '<td>—</td>';
+          cats.forEach(c => {
+            const rec = records[ep][c];
+            html += rec ? `<td>${rec.temps}<br><small class="small">${rec.nom}</small></td>` : '<td>—</td>';
           });
           html += '</tr>';
         });
@@ -257,32 +165,12 @@
         return html;
       }
 
-      document.getElementById('recordsFemmes').innerHTML = makeRecordsTableHtml(recF);
-      document.getElementById('recordsHommes').innerHTML  = makeRecordsTableHtml(recM);
-
-      // ---- activation des filtres sur tableau principal
-      const filters = document.querySelectorAll('.colFilter');
-      filters.forEach(select => {
-        select.addEventListener('change', () => {
-          const rows = document.querySelectorAll('#resultsTable tbody tr');
-          rows.forEach(row => {
-            let visible = true;
-            filters.forEach(f => {
-              const col = parseInt(f.dataset.col,10);
-              const val = f.value;
-              if (val && row.cells[col].textContent !== val) visible = false;
-            });
-            row.style.display = visible ? '' : 'none';
-          });
-        });
-      });
-
+      document.getElementById('recordsFemmes').innerHTML = makeRecordsTable(computeRecordsForSex('Feminin'));
+      document.getElementById('recordsHommes').innerHTML = makeRecordsTable(computeRecordsForSex('Masculin'));
     })
     .catch(err => {
-      console.error('Erreur lecture CSV :', err);
-      document.getElementById('tableContainer').textContent = 'Erreur lors du chargement des résultats.';
-      document.getElementById('recordsFemmes').textContent = '';
-      document.getElementById('recordsHommes').textContent = '';
+      console.error(err);
+      document.getElementById('tableContainer').textContent = 'Erreur lors du chargement.';
     });
   </script>
 </body>
