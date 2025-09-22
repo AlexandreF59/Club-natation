@@ -9,14 +9,14 @@
       border-collapse: collapse;
       width: 90%;
       max-width: 1200px;
-      margin: 2em auto;
+      margin: 1.5em auto;
       background-color: #f9f9f9;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 
     .csv-table th, .csv-table td {
       border: 1px solid #ccc;
-      padding: 10px 12px;
+      padding: 8px 10px;
       text-align: center;
     }
 
@@ -35,12 +35,23 @@
 
     h2 {
       text-align: center;
-      margin-top: 2em;
+      margin-top: 1.5em;
     }
 
-    select.colFilter {
-      margin-top: 5px;
-      width: 100%;
+    .small {
+      font-size: 0.85em;
+      color: #333;
+    }
+
+    .no-records {
+      text-align: center;
+      color: #666;
+      margin: 0.8em 0 1.5em 0;
+    }
+
+    /* responsive for records tables */
+    @media (max-width: 900px) {
+      .csv-table { width: 95%; font-size: 0.9em; }
     }
   </style>
 </head>
@@ -51,11 +62,8 @@
     <section class="intro-section">
       <h2>Résultats du club</h2>
       <p>
-        Retrouvez ici les performances de nos nageurs, extraites des résultats officiels de la 
-        <a href="https://www.ffnatation.fr" target="_blank"><strong>Fédération Française de Natation (FFN)</strong></a>. 
-      </p>
-      <p>
-        Ces données reflètent les compétitions auxquelles nos athlètes ont participé et illustrent leurs progrès et leurs succès tout au long de la saison.
+        Retrouvez ici les performances de nos nageurs, extraites des résultats officiels de la
+        <a href="https://www.ffnatation.fr" target="_blank"><strong>Fédération Française de Natation (FFN)</strong></a>.
       </p>
     </section>
 
@@ -70,133 +78,216 @@
   </main>
 
   <footer id="footer"></footer>
-  
+
+  <!-- GoatCounter (si déjà en place) -->
   <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count"
           async src="https://gc.zgo.at/count.js"></script>
-  
+
   <script>
-    // Charger header et footer
-    fetch('header.html').then(r => r.text()).then(d => { document.getElementById('header').innerHTML = d; });
-    fetch('footer.html').then(r => r.text()).then(d => { document.getElementById('footer').innerHTML = d; });
+  // ---- UTILITAIRES ----
 
-    // Fonction utilitaire pour comparer les temps
-    function parseTime(t) {
-      if (!t) return Infinity;
-      const parts = t.split(':');
-      let sec = 0;
-      if (parts.length === 2) { // mm:ss.xx
-        sec = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
-      } else if (parts.length === 3) { // hh:mm:ss.xx
-        sec = parseFloat(parts[0]) * 3600 + parseFloat(parts[1]) * 60 + parseFloat(parts[2]);
-      } else {
-        sec = parseFloat(t) || Infinity;
-      }
-      return sec;
+  // Normalise texte : supprime accents, trim, passe en minuscule
+  function normalizeText(s) {
+    if (!s && s !== 0) return '';
+    return String(s).trim()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // supprime accents
+      .toLowerCase();
+  }
+
+  // Normalise le champ "sexe" en 'Feminin' ou 'Masculin' si possible
+  function normalizeSexField(s) {
+    const n = normalizeText(s);
+    if (!n) return '';
+    if (n.includes('f')) return 'Feminin';
+    if (n.includes('m')) return 'Masculin';
+    return s; // si autre contenu, retourne brut
+  }
+
+  // Convertit un temps "mm:ss.xx" ou "m:ss,xx" ou "hh:mm:ss.xx" en secondes (Number)
+  function parseTimeToSeconds(t) {
+    if (!t) return Infinity;
+    const s = String(t).trim().replace(/\s/g,'').replace(',', '.'); // remplace virgule par point
+    const parts = s.split(':');
+    // conversion sûre avec parseFloat
+    if (parts.length === 1) {
+      const v = parseFloat(parts[0]);
+      return isNaN(v) ? Infinity : v;
+    } else if (parts.length === 2) {
+      const mins = parseFloat(parts[0]) || 0;
+      const secs = parseFloat(parts[1]) || 0;
+      return mins * 60 + secs;
+    } else if (parts.length === 3) {
+      const h = parseFloat(parts[0]) || 0;
+      const m = parseFloat(parts[1]) || 0;
+      const sec = parseFloat(parts[2]) || 0;
+      return h*3600 + m*60 + sec;
     }
+    return Infinity;
+  }
 
-    // Charger le CSV
-    fetch('data/resultats_csv.csv')
-      .then(r => r.text())
-      .then(text => {
-        const lines = text.replace(/\r/g,'').split('\n');
-        const headers = lines[0].split(';').map(h => h.trim());
-        const data = lines.slice(1).filter(l => l.trim() !== '').map(l => l.split(';').map(c => c.trim()));
+  // Format affichage (si besoin) - laisse le temps tel quel
+  function safeText(t) { return (t === undefined || t === null) ? '' : String(t); }
 
-        // ---- TABLEAU GENERAL ----
-        let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
-        headers.forEach((h, i) => {
-          const uniqueValues = [...new Set(data.map(row => row[i]))].sort();
-          let selectHTML = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
-          uniqueValues.forEach(val => { selectHTML += `<option value="${val}">${val}</option>`; });
-          selectHTML += '</select>';
-          tableHTML += `<th>${h}<br>${selectHTML}</th>`;
-        });
-        tableHTML += '</tr></thead><tbody>';
+  // ---- CHARGEMENT HEADER/FOOTER (ton code existant) ----
+  fetch('header.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('header').innerHTML = d; })
+    .catch(()=>{ /* ignore */ });
+
+  fetch('footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer').innerHTML = d; })
+    .catch(()=>{ /* ignore */ });
+
+  // ---- CHARGER ET TRAITER LE CSV ----
+  fetch('data/resultats_csv.csv')
+    .then(r => r.text())
+    .then(text => {
+      // split lignes robustement
+      const rawLines = text.replace(/\r/g,'').split('\n').filter(l => l.trim() !== '');
+      if (rawLines.length < 1) {
+        document.getElementById('tableContainer').textContent = 'Fichier CSV vide ou introuvable.';
+        return;
+      }
+
+      // header et données
+      const headers = rawLines[0].split(';').map(h => h.trim());
+      const data = rawLines.slice(1).map(line => {
+        // split en colonnes ; si une ligne comporte moins de colonnes, on complète par ''
+        const cols = line.split(';').map(c => c.trim());
+        // garantie longueur minimale (au moins index 8)
+        while (cols.length < 9) cols.push('');
+        return cols;
+      });
+
+      // ---- TABLEAU GENERAL (avec filtres) ----
+      let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
+      headers.forEach((h, i) => {
+        // récupérer valeurs uniques pour le filtre
+        const uniqueValues = [...new Set(data.map(row => row[i] || ''))].filter(v => v !== '').sort();
+        let selectHTML = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
+        uniqueValues.forEach(val => { selectHTML += `<option value="${val}">${val}</option>`; });
+        selectHTML += '</select>';
+        tableHTML += `<th>${h || ('Col ' + i)}<br>${selectHTML}</th>`;
+      });
+      tableHTML += '</tr></thead><tbody>';
+
+      data.forEach(row => {
+        tableHTML += '<tr>';
+        headers.forEach((_, i) => tableHTML += `<td>${safeText(row[i])}</td>`);
+        tableHTML += '</tr>';
+      });
+      tableHTML += '</tbody></table>';
+      document.getElementById('tableContainer').innerHTML = tableHTML;
+
+      // ---- CALCUL DES RECORDS ----
+      // indices (d'après tes indications) :
+      const IDX_EPREUVE = 0;
+      const IDX_SEXE    = 2; // contains "Feminin" or "Masculin" (ou accentué)
+      const IDX_NOM     = 3;
+      const IDX_TEMPS   = 5;
+      const IDX_CATEG   = 8;
+
+      // fonction qui calcule records pour un sexe donné ('Feminin' ou 'Masculin')
+      function computeRecordsForSex(targetSexLabel) {
+        const records = {}; // { epreuve: { categorie: { nom, temps, sec } } }
+        const categoriesSet = new Set();
+        const epreuvesSet = new Set();
 
         data.forEach(row => {
-          tableHTML += '<tr>';
-          row.forEach(cell => tableHTML += `<td>${cell}</td>`);
-          tableHTML += '</tr>';
+          const epreuve = safeText(row[IDX_EPREUVE]);
+          const sexeRaw = safeText(row[IDX_SEXE]);
+          const sexe = normalizeSexField(sexeRaw); // 'Feminin'/'Masculin' or '' 
+          const nom = safeText(row[IDX_NOM]);
+          const temps = safeText(row[IDX_TEMPS]);
+          const categorie = safeText(row[IDX_CATEG]) || '—';
+
+          if (!epreuve) return; // ignore lignes vides
+          epreuvesSet.add(epreuve);
+
+          if (sexe !== targetSexLabel) return;
+
+          categoriesSet.add(categorie);
+
+          const sec = parseTimeToSeconds(temps);
+          if (!records[epreuve]) records[epreuve] = {};
+          if (!records[epreuve][categorie] || (records[epreuve][categorie].sec > sec)) {
+            records[epreuve][categorie] = { nom: nom, temps: temps, sec: sec };
+          }
         });
-        tableHTML += '</tbody></table>';
-        document.getElementById('tableContainer').innerHTML = tableHTML;
 
-        // ---- RECORDS ----
-        function computeRecords(sex) {
-          let records = {};
-          data.forEach(row => {
-            const epreuve   = row[0]; // épreuve
-            const sexe      = row[2]; // sexe (Feminin/Masculin)
-            const nom       = row[3]; // nageur
-            const temps     = row[5]; // temps
-            const categorie = row[8]; // catégorie
+        // ensure all epreuves appear even if no record in some categories
+        return {
+          recordsObj: records,
+          categories: Array.from(categoriesSet).sort(),
+          epreuves: Array.from(epreuvesSet).sort()
+        };
+      }
 
-            if (sexe !== sex) return;
+      function makeRecordsTableHtml(recordsObj, categories, epreuves) {
+        if (!epreuves.length || !categories.length) {
+          return '<p class="no-records">Aucun record trouvé pour cette catégorie.</p>';
+        }
 
-            if (!records[epreuve]) records[epreuve] = {};
-            if (!records[epreuve][categorie] || parseTime(records[epreuve][categorie].temps) > parseTime(temps)) {
-              records[epreuve][categorie] = { nom, temps };
+        let html = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
+        categories.forEach(cat => html += `<th>${cat}</th>`);
+        html += '</tr></thead><tbody>';
+
+        epreuves.forEach(epreuve => {
+          html += `<tr><td style="text-align:left">${epreuve}</td>`;
+          categories.forEach(cat => {
+            const cell = (recordsObj[epreuve] && recordsObj[epreuve][cat]) ? recordsObj[epreuve][cat] : null;
+            if (cell) {
+              html += `<td>${cell.temps}<br><small class="small">${cell.nom}</small></td>`;
+            } else {
+              html += '<td>—</td>';
             }
           });
-          return records;
-        }
+          html += '</tr>';
+        });
 
-        function recordsToHTML(records) {
-          const categories = new Set();
-          Object.values(records).forEach(cats => {
-            Object.keys(cats).forEach(c => categories.add(c));
-          });
-          const cats = Array.from(categories).sort();
+        html += '</tbody></table>';
+        return html;
+      }
 
-          let html = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
-          cats.forEach(c => html += `<th>${c}</th>`);
-          html += '</tr></thead><tbody>';
+      // calcul pour les deux sexes (attention on normalise)
+      const rF = computeRecordsForSex('Feminin');
+      const rM = computeRecordsForSex('Masculin');
 
-          Object.keys(records).forEach(epreuve => {
-            html += `<tr><td>${epreuve}</td>`;
-            cats.forEach(c => {
-              if (records[epreuve][c]) {
-                html += `<td>${records[epreuve][c].temps}<br><small>${records[epreuve][c].nom}</small></td>`;
-              } else {
-                html += '<td>-</td>';
-              }
+      // si aucune catégorie/epreuve pour un sexe, on affiche message approprié
+      const htmlF = makeRecordsTableHtml(rF.recordsObj, rF.categories, rF.epreuves);
+      const htmlM = makeRecordsTableHtml(rM.recordsObj, rM.categories, rM.epreuves);
+
+      document.getElementById('recordsFemmes').innerHTML = htmlF;
+      document.getElementById('recordsHommes').innerHTML = htmlM;
+
+      // ---- FILTRES DU TABLEAU PRINCIPAL ----
+      const filters = document.querySelectorAll('.colFilter');
+      filters.forEach(select => {
+        select.addEventListener('change', () => {
+          const rows = document.querySelectorAll('#resultsTable tbody tr');
+          rows.forEach(row => {
+            let show = true;
+            filters.forEach(f => {
+              const col = parseInt(f.dataset.col, 10);
+              const val = f.value;
+              if (val && row.cells[col].textContent !== val) show = false;
             });
-            html += '</tr>';
-          });
-
-          html += '</tbody></table>';
-          return html;
-        }
-
-        const recordsFemmes = computeRecords("Feminin");
-        const recordsHommes = computeRecords("Masculin");
-
-        document.getElementById('recordsFemmes').innerHTML = recordsToHTML(recordsFemmes);
-        document.getElementById('recordsHommes').innerHTML = recordsToHTML(recordsHommes);
-
-        // ---- FILTRES ----
-        const filters = document.querySelectorAll('.colFilter');
-        filters.forEach(select => {
-          select.addEventListener('change', () => {
-            const rows = document.querySelectorAll('#resultsTable tbody tr');
-            rows.forEach(row => {
-              let show = true;
-              filters.forEach(f => {
-                const col = f.dataset.col;
-                const val = f.value;
-                if (val && row.cells[col].textContent !== val) show = false;
-              });
-              row.style.display = show ? '' : 'none';
-            });
+            row.style.display = show ? '' : 'none';
           });
         });
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById('tableContainer').textContent = 'Erreur lors du chargement des résultats.';
       });
+
+    })
+    .catch(err => {
+      console.error('Erreur lecture CSV :', err);
+      document.getElementById('tableContainer').textContent = 'Erreur lors du chargement des résultats.';
+      document.getElementById('recordsFemmes').textContent = '';
+      document.getElementById('recordsHommes').textContent = '';
+    });
   </script>
 </body>
 </html>
+
 
 
