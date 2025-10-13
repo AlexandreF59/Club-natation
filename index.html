@@ -8,6 +8,7 @@
 
   <body>
      
+  <div id="bandeau"></div>
   <div id="header"></div>
 
   <main>
@@ -64,6 +65,11 @@
         async src="https://gc.zgo.at/count.js"></script>
   
   <script>
+    // Charger le bandeau
+    fetch('bandeau.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('bandeau').innerHTML = data; });
+    
     // Charger le header
     fetch('header.html')
       .then(response => response.text())
