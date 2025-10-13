@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="bandeau"></div>
   <!-- Conteneur pour le header dynamique -->
   <div id="header"></div>
 
@@ -70,6 +71,11 @@
           async src="https://gc.zgo.at/count.js"></script>
   
   <script>
+  // Charger le bandeau
+    fetch('bandeau.html')
+      .then(response => response.text())
+      .then(data => { document.getElementById('bandeau').innerHTML = data; });
+    
   // Charger le header et le footer dynamiquement
   fetch('header.html')
     .then(response => response.text())
