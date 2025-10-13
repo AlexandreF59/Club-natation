@@ -40,9 +40,23 @@
   
   <script>
     // Charger le bandeau
-    fetch('bandeau.html')
-      .then(response => response.text())
-      .then(data => { document.getElementById('bandeau').innerHTML = data; });
+  fetch('bandeau.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('bandeau').innerHTML = data;
+
+      // ➕ Réexécuter le script inclus dans bandeau.html
+      const scripts = document.getElementById('bandeau').getElementsByTagName('script');
+      for (let i = 0; i < scripts.length; i++) {
+        const script = document.createElement('script');
+        if (scripts[i].src) {
+          script.src = scripts[i].src;
+        } else {
+          script.textContent = scripts[i].textContent;
+        }
+        document.body.appendChild(script);
+      }
+    });
     
     // Charger le header
     fetch('header.html')
