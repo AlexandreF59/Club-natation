@@ -54,7 +54,7 @@
     /* Bouton "Afficher plus" */
     .show-more-btn {
       display: block;
-      margin: 15px auto;
+      margin: 12px auto;
       padding: 10px 18px;
       background-color: #0057b8;
       color: white;
@@ -100,39 +100,38 @@
 
   <footer id="footer"></footer>
 
-  <!-- GoatCounter (optionnel si tu l'utilises) -->
+  <!-- GoatCounter (optionnel) -->
   <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 
-  <!-- charger bandeau / header / footer -->
+  <!-- Charger fragments (bandeau / header / footer) -->
   <script>
-    // charge un fichier HTML et ré-exécute les scripts qu'il contient
     async function loadFragment(id, url) {
       try {
         const res = await fetch(url);
         if (!res.ok) return;
         const html = await res.text();
         document.getElementById(id).innerHTML = html;
-        // réexécuter scripts inlines et externes
+        // réexécuter les scripts inclus (inline ou externes)
         const container = document.getElementById(id);
         const scripts = container.querySelectorAll('script');
         scripts.forEach(s => {
-          const newScript = document.createElement('script');
-          if (s.src) newScript.src = s.src;
-          else newScript.textContent = s.textContent;
-          document.body.appendChild(newScript);
+          const ns = document.createElement('script');
+          if (s.src) ns.src = s.src;
+          else ns.textContent = s.textContent;
+          document.body.appendChild(ns);
         });
       } catch (e) {
         console.error('loadFragment', url, e);
       }
     }
-
-    loadFragment('bandeau', 'bandeau.html');
-    loadFragment('header', 'header.html');
-    loadFragment('footer', 'footer.html');
+    loadFragment('bandeau','bandeau.html');
+    loadFragment('header','header.html');
+    loadFragment('footer','footer.html');
   </script>
 
-  <!-- script principal: parse CSV, build tables, filtres, et "Afficher plus" -->
+  <!-- Script principal : parse CSV, build records, build full table with filters + "Afficher plus" -->
   <script>
+    // convertit mm:ss ou ss.ms en secondes (pour comparer)
     function timeToSeconds(t) {
       if (!t) return Infinity;
       const parts = t.split(':').map(p => p.trim());
@@ -140,38 +139,39 @@
       if (parts.length === 2) return parseInt(parts[0],10) * 60 + parseFloat(parts[1]) || Infinity;
       return Infinity;
     }
-
-    // Utility: safe text for HTML (basic)
+    // échappement basique
     function esc(s){ return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // Nombre de lignes initiales / par clic "Afficher plus"
+    const BATCH = 20;
 
     fetch('data/resultats_csv.csv')
       .then(r => r.text())
       .then(text => {
-        const lines = text.replace(/\r/g,'').split('\n').filter(Boolean);
+        const lines = text.replace(/\r/g,'').split('\n').filter(l => l.trim() !== '');
         if (lines.length === 0) throw new Error('CSV vide');
         const headers = lines[0].split(';').map(h => h.trim());
         const data = lines.slice(1).map(l => l.split(';').map(c => c.trim()));
 
-        // colonnes d'intérêt (selon ton CSV)
+        // indices colonnes (selon ton CSV)
         const colEpreuve = 0, colGenre = 1, colNom = 2, colTemps = 4, colCategorie = 7;
 
-        const categorieOrder = ["Avenirs", "Benjamins", "Juniors", "Seniors",
+        const categorieOrder = ["Avenirs","Benjamins","Juniors","Seniors",
                                 "Master C1","Master C2","Master C3","Master C4",
                                 "Master C5","Master C6","Master C7","Master C8"];
 
-        // construit et affiche les tableaux de records
+        // -- BUILD RECORDS --
         function buildRecordsTable(genre, containerId) {
           const records = {};
-          data.filter(row => row[colGenre] === genre).forEach(row => {
-            const epreuve = row[colEpreuve];
+          data.filter(r => r[colGenre] === genre).forEach(row => {
+            const epreuve = row[colEpreuve] || '';
             const cat = row[colCategorie] || '—';
             const nom = row[colNom] || '';
             const temps = row[colTemps] || '';
-            const tsec = timeToSeconds(temps);
-
+            const tsecs = timeToSeconds(temps);
             if (!records[epreuve]) records[epreuve] = {};
-            if (!records[epreuve][cat] || tsec < records[epreuve][cat].timeSec) {
-              records[epreuve][cat] = { temps, nom, timeSec: tsec };
+            if (!records[epreuve][cat] || tsecs < records[epreuve][cat].timeSec) {
+              records[epreuve][cat] = { temps, nom, timeSec: tsecs };
             }
           });
 
@@ -181,23 +181,23 @@
             return;
           }
 
-          // ne garder que les catégories utilisées (dans l'ordre souhaité)
-          const usedCats = categorieOrder.filter(cat => Object.values(records).some(r => r[cat]));
+          // choisir uniquement catégories utilisées, dans l'ordre souhaité
+          let usedCats = categorieOrder.filter(cat => Object.values(records).some(r => r[cat]));
           if (usedCats.length === 0) {
-            // fallback: toutes catégories trouvées
-            const allCats = new Set();
-            Object.values(records).forEach(r => Object.keys(r).forEach(k => allCats.add(k)));
-            usedCats.push(...Array.from(allCats));
+            // fallback : toutes catégories rencontrées
+            const all = new Set();
+            Object.values(records).forEach(r => Object.keys(r).forEach(k => all.add(k)));
+            usedCats = Array.from(all);
           }
 
           let html = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
-          usedCats.forEach(cat => html += `<th>${esc(cat)}</th>`);
+          usedCats.forEach(c => html += `<th>${esc(c)}</th>`);
           html += '</tr></thead><tbody>';
 
-          Object.keys(records).forEach(epreuve => {
-            html += `<tr><td style="text-align:left">${esc(epreuve)}</td>`;
+          Object.keys(records).forEach(ep => {
+            html += `<tr><td style="text-align:left">${esc(ep)}</td>`;
             usedCats.forEach(cat => {
-              const rec = records[epreuve][cat];
+              const rec = records[ep][cat];
               if (rec) html += `<td>${esc(rec.temps)}<br><small>${esc(rec.nom)}</small></td>`;
               else html += '<td></td>';
             });
@@ -207,120 +207,98 @@
           html += '</tbody></table>';
           container.innerHTML = html;
 
-          // mettre en évidence le meilleur temps (toutes catégories confondues)
-          const rows = container.querySelectorAll('tbody tr');
-          rows.forEach(r => {
-            const cells = Array.from(r.querySelectorAll('td')).slice(1);
-            let bestCell = null, bestTime = Infinity;
+          // surligner le meilleur temps par épreuve (toutes catégories confondues)
+          Array.from(container.querySelectorAll('tbody tr')).forEach(tr => {
+            const cells = Array.from(tr.querySelectorAll('td')).slice(1);
+            let best = null, bestTime = Infinity;
             cells.forEach(c => {
               const txt = c.textContent.trim();
               if (!txt) return;
               const timeStr = txt.split('\n')[0].split('(')[0].trim();
               const secs = timeToSeconds(timeStr);
-              if (secs < bestTime) { bestTime = secs; bestCell = c; }
+              if (secs < bestTime) { bestTime = secs; best = c; }
             });
-            if (bestCell) bestCell.classList.add('best-record');
+            if (best) best.classList.add('best-record');
           });
         }
 
-        // --- build records ---
-        buildRecordsTable('Feminin', 'recordsFeminin');
-        buildRecordsTable('Masculin', 'recordsMasculin');
+        buildRecordsTable('Feminin','recordsFeminin');
+        buildRecordsTable('Masculin','recordsMasculin');
 
-        // --- build full results table with filters ---
-        let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
+        // --- BUILD FULL TABLE WITH FILTERS ---
+        // header with selects
+        let tableHtml = '<table id="resultsTable" class="csv-table"><thead><tr>';
         headers.forEach((h,i) => {
-          const uniqueValues = [...new Set(data.map(row => row[i] || '').filter(Boolean))].sort();
-          let select = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
-          uniqueValues.forEach(val => select += `<option value="${esc(val)}">${esc(val)}</option>`);
-          select += '</select>';
-          tableHTML += `<th>${esc(h)}<br>${select}</th>`;
+          const unique = [...new Set(data.map(r => r[i] || '').filter(Boolean))].sort((a,b)=> a.localeCompare(b,'fr'));
+          let sel = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
+          unique.forEach(v => sel += `<option value="${esc(v)}">${esc(v)}</option>`);
+          sel += '</select>';
+          tableHtml += `<th>${esc(h)}<br>${sel}</th>`;
         });
-        tableHTML += '</tr></thead><tbody>';
-        data.forEach(row => {
-          tableHTML += '<tr>';
-          row.forEach(cell => tableHTML += `<td>${esc(cell)}</td>`);
-          tableHTML += '</tr>';
-        });
-        tableHTML += '</tbody></table>';
+        tableHtml += '</tr></thead><tbody></tbody></table>';
+        const container = document.getElementById('tableContainer');
+        container.innerHTML = tableHtml;
 
-        document.getElementById('tableContainer').innerHTML = tableHTML;
+        // state: how many to show
+        let shownCount = BATCH;
 
-        // --- filtering logic ---
-        function applyFilters() {
-          const filters = Array.from(document.querySelectorAll('.colFilter')).map(f => ({ col: Number(f.dataset.col), val: f.value }));
-          const rows = Array.from(document.querySelectorAll('#resultsTable tbody tr'));
-          rows.forEach(row => {
-            let show = true;
-            for (const f of filters) {
-              if (f.val && row.cells[f.col].textContent !== f.val) { show = false; break; }
-            }
-            row.style.display = show ? '' : 'none';
-          });
-          updateShowMoreState(); // important: réajuster le bouton "Afficher plus"
+        // helpers
+        function getFilters() {
+          return Array.from(document.querySelectorAll('.colFilter')).map(s => ({ col: Number(s.dataset.col), val: s.value }));
+        }
+        function rowMatchesFilters(row, filters) {
+          for (const f of filters) {
+            if (!f.val) continue;
+            if ((row[f.col] || '') !== f.val) return false;
+          }
+          return true;
         }
 
-        // attach change listeners on filters
-        document.querySelectorAll('.colFilter').forEach(sel => sel.addEventListener('change', applyFilters));
-
-        // --- Show more logic that respects filters ---
-        const MAX_BATCH = 20;
-        function updateShowMoreState() {
+        // render function : rebuild tbody from data + filters + shownCount
+        function renderRows() {
           const tbody = document.querySelector('#resultsTable tbody');
-          if (!tbody) return;
-          let btn = tbody.parentElement.querySelector('.show-more-btn');
-          const rows = Array.from(tbody.querySelectorAll('tr'));
-          const visibleMatching = rows.filter(r => r.style.display !== 'none' && r.dataset._shown === 'true');
-          const matching = rows.filter(r => r.style.display !== 'none');
+          const filters = getFilters();
+          tbody.innerHTML = '';
+          const matching = data.filter(r => rowMatchesFilters(r, filters));
+          const totalMatching = matching.length;
+          const toShow = matching.slice(0, shownCount);
 
-          // initially mark none as _shown if not set
-          let shownCount = rows.filter(r => r.dataset._shown === 'true').length;
+          toShow.forEach(row => {
+            const tr = '<tr>' + row.map(c => `<td>${esc(c)}</td>`).join('') + '</tr>';
+            tbody.insertAdjacentHTML('beforeend', tr);
+          });
 
-          // if no _shown markers yet, initialize first batch
-          if (shownCount === 0) {
-            // hide all then show first batch of matching
-            rows.forEach(r => r.dataset._shown = 'false');
-            let shown = 0;
-            for (let r of rows) {
-              if (r.style.display === 'none') continue;
-              if (shown < MAX_BATCH) { r.dataset._shown = 'true'; r.style.display = ''; shown++; }
-              else { r.dataset._shown = 'false'; r.style.display = 'none'; }
-            }
-          } else {
-            // ensure rows that are _shown=true remain visible and others hidden
-            rows.forEach(r => {
-              if (r.dataset._shown === 'true') r.style.display = '';
-              else r.style.display = 'none';
-            });
-          }
-
-          // count remaining matching hidden
-          const remaining = rows.filter(r => r.style.display === 'none' && r.dataset._shown === 'false').length;
+          // update / create bouton "Afficher plus"
+          let btn = container.querySelector('.show-more-btn');
           if (!btn) {
             btn = document.createElement('button');
             btn.className = 'show-more-btn';
-            btn.textContent = `Afficher plus (${remaining})`;
-            tbody.parentElement.appendChild(btn);
-            btn.addEventListener('click', function() {
-              // show next batch of matching hidden rows
-              const hiddenMatching = rows.filter(r => r.dataset._shown === 'false' && r.style.display === 'none');
-              hiddenMatching.slice(0, MAX_BATCH).forEach(r => { r.dataset._shown = 'true'; r.style.display = ''; });
-              const newRemaining = rows.filter(r => r.dataset._shown === 'false' && r.style.display === 'none').length;
-              if (newRemaining === 0) btn.style.display = 'none';
-              else btn.textContent = `Afficher plus (${newRemaining})`;
+            container.appendChild(btn);
+            btn.addEventListener('click', () => {
+              shownCount += BATCH;
+              renderRows(); // rerender with increased shownCount
             });
+          }
+          const remaining = Math.max(0, totalMatching - toShow.length);
+          if (remaining > 0) {
+            btn.style.display = '';
+            btn.textContent = `Afficher plus (${remaining})`;
           } else {
-            if (remaining === 0) btn.style.display = 'none';
-            else { btn.style.display = ''; btn.textContent = `Afficher plus (${remaining})`; }
+            btn.style.display = 'none';
           }
         }
 
-        // initialize pagination / show-more after table is inserted
-        // call applyFilters once to set initial visibility + show-more state
-        applyFilters();
-        updateShowMoreState();
+        // attach listeners to selects
+        document.querySelectorAll('.colFilter').forEach(sel => {
+          sel.addEventListener('change', () => {
+            // reset shownCount and rerender
+            shownCount = BATCH;
+            renderRows();
+          });
+        });
 
-        // Also update show-more whenever filters change (already wired in applyFilters)
+        // initial render
+        renderRows();
       })
       .catch(err => {
         console.error(err);
