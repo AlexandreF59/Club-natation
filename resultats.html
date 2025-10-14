@@ -25,9 +25,11 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="images/favicon.png">
-  
+
   <style>
-    /* Tableaux CSV */
+    /* ===========================
+       TABLEAUX CSV
+       =========================== */
     .csv-table {
       border-collapse: collapse;
       width: 100%;
@@ -40,7 +42,7 @@
       border: 1px solid #ccc;
       padding: 12px 15px;
       text-align: center;
-      white-space: nowrap; /* évite que le texte coupe sur 2 lignes */
+      white-space: nowrap;
     }
 
     .csv-table th {
@@ -69,13 +71,11 @@
       width: 100%;
     }
 
-    /* Meilleur temps */
     .best-record {
       background-color: gold !important;
       font-weight: bold;
     }
 
-    /* Conteneur scrollable pour les tableaux larges */
     .table-container {
       width: 100%;
       overflow-x: auto;
@@ -90,59 +90,27 @@
       background-color: #ccc;
       border-radius: 3px;
     }
+
+    /* Bouton "Afficher plus" */
+    .show-more-btn {
+      display: block;
+      margin: 15px auto;
+      padding: 10px 18px;
+      background-color: #0057b8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .show-more-btn:hover {
+      background-color: #003f82;
+    }
   </style>
 </head>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const maxVisibleRows = 20; // nombre de lignes visibles par défaut
 
-  function appliquerPagination(tableContainer) {
-    const table = tableContainer.querySelector("table");
-    if (!table) return;
-
-    const rows = table.querySelectorAll("tbody tr");
-    if (rows.length <= maxVisibleRows) return; // pas besoin de bouton si petit tableau
-
-    // masquer les lignes au-delà du seuil
-    for (let i = maxVisibleRows; i < rows.length; i++) {
-      rows[i].style.display = "none";
-    }
-
-    // bouton "Voir plus"
-    const btn = document.createElement("button");
-    btn.className = "show-more-btn";
-    btn.textContent = "Voir plus";
-
-    btn.addEventListener("click", function() {
-      const hiddenRows = Array.from(rows).filter(r => r.style.display === "none");
-      hiddenRows.slice(0, maxVisibleRows).forEach(r => r.style.display = "table-row");
-
-      if (hiddenRows.length <= maxVisibleRows) {
-        btn.style.display = "none"; // tout affiché → on cache le bouton
-      }
-    });
-
-    tableContainer.appendChild(btn);
-  }
-
-  // observer dynamiquement les éléments ajoutés dans les conteneurs
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      mutation.addedNodes.forEach(node => {
-        if (node.nodeType === 1 && node.tagName === "TABLE") {
-          const container = node.closest(".table-container");
-          if (container) appliquerPagination(container);
-        }
-      });
-    }
-  });
-
-  document.querySelectorAll(".table-container").forEach(container => {
-    observer.observe(container, { childList: true });
-  });
-});
-</script>
-  
 <body>
   <div id="bandeau"></div>
   <div id="header"></div>
@@ -179,34 +147,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
   <footer id="footer"></footer>
 
+  <!-- GoatCounter -->
   <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count"
           async src="https://gc.zgo.at/count.js"></script>
 
+  <!-- Chargement bandeau / header / footer -->
   <script>
-    // Charger le bandeau
     fetch('bandeau.html')
-      .then(response => response.text())
+      .then(r => r.text())
       .then(data => {
         document.getElementById('bandeau').innerHTML = data;
         const scripts = document.getElementById('bandeau').getElementsByTagName('script');
-        for (let i = 0; i < scripts.length; i++) {
-          const script = document.createElement('script');
-          if (scripts[i].src) script.src = scripts[i].src;
-          else script.textContent = scripts[i].textContent;
-          document.body.appendChild(script);
+        for (let s of scripts) {
+          const newScript = document.createElement('script');
+          if (s.src) newScript.src = s.src;
+          else newScript.textContent = s.textContent;
+          document.body.appendChild(newScript);
         }
       });
 
-    // Charger le header et le footer
     fetch('header.html')
-      .then(response => response.text())
+      .then(r => r.text())
       .then(data => document.getElementById('header').innerHTML = data);
-    
-    fetch('footer.html')
-      .then(response => response.text())
-      .then(data => document.getElementById('footer').innerHTML = data);
 
-    // Convertir un temps en secondes
+    fetch('footer.html')
+      .then(r => r.text())
+      .then(data => document.getElementById('footer').innerHTML = data);
+  </script>
+
+  <!-- Script principal -->
+  <script>
     function timeToSeconds(t) {
       if (!t) return Infinity;
       const parts = t.split(":").map(p => p.trim());
@@ -215,7 +185,6 @@ document.addEventListener("DOMContentLoaded", function() {
       return Infinity;
     }
 
-    // Charger le CSV
     fetch('data/resultats_csv.csv')
       .then(r => r.text())
       .then(text => {
@@ -310,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function() {
         tableHTML += '</tbody></table>';
         document.getElementById('tableContainer').innerHTML = tableHTML;
 
+        // Filtres
         const filters = document.querySelectorAll('.colFilter');
         filters.forEach(select => {
           select.addEventListener('change', () => {
@@ -325,6 +295,25 @@ document.addEventListener("DOMContentLoaded", function() {
             });
           });
         });
+
+        // Limiter le tableau complet à 20 lignes visibles
+        const table = document.querySelector("#resultsTable");
+        if (table) {
+          const rows = Array.from(table.querySelectorAll("tbody tr"));
+          const maxVisible = 20;
+          if (rows.length > maxVisible) {
+            rows.slice(maxVisible).forEach(tr => tr.style.display = "none");
+            const btn = document.createElement("button");
+            btn.className = "show-more-btn";
+            btn.textContent = "Afficher plus";
+            btn.addEventListener("click", () => {
+              const hidden = rows.filter(r => r.style.display === "none");
+              hidden.slice(0, maxVisible).forEach(r => r.style.display = "");
+              if (hidden.length <= maxVisible) btn.style.display = "none";
+            });
+            table.parentNode.appendChild(btn);
+          }
+        }
       })
       .catch(err => {
         console.error(err);
@@ -333,4 +322,3 @@ document.addEventListener("DOMContentLoaded", function() {
   </script>
 </body>
 </html>
-
