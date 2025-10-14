@@ -183,31 +183,48 @@ main {
    =========================== */
 @media (max-width: 768px) {
 
-  /* Header empilé */
+  /* Header mobile révisé */
   header {
     flex-direction: column;
     padding: 10px 0;
   }
 
-  /* Logos réduits et empilés */
-  header .logo,
-  header .logo-cchf {
-    position: relative;  /* empilement naturel */
-    height: 40px;        /* réduit pour mobile */
-    max-width: 100px;    /* limite largeur mobile */
-    transform: none;     /* annule le translateY */
-    margin: 5px 0;       /* espace entre logos et texte */
+  /* Ligne supérieure : logos à gauche et droite */
+  .header-logos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto 10px auto;
   }
 
-  /* Titre réduit */
+  header .logo,
+  header .logo-cchf {
+    position: static;
+    height: 40px;
+    width: auto;
+    max-width: 80px;
+    transform: none;
+  }
+
+  /* Titre recentré proprement */
   header .header-center h1 {
-    font-size: 1.4em;
+    font-size: 1.2em;
+    line-height: 1.3;
+    margin: 0 10px;
+    word-wrap: break-word;
   }
 
   /* Navigation centrée */
   header nav {
-    margin-top: 10px;
+    margin-top: 8px;
     text-align: center;
+    line-height: 1.8;
+  }
+
+  header nav a {
+    display: inline-block;
+    margin: 3px 6px;
   }
 
   /* Footer plus compact */
@@ -216,6 +233,7 @@ main {
     padding: 15px 0;
   }
 }
+
 .training-table {
   margin: 2em auto;           /* Centre le tableau horizontalement et espace vertical */
   border-collapse: collapse;   /* Supprime les doubles bordures */
