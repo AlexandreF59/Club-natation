@@ -92,6 +92,39 @@
     }
   </style>
 </head>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const maxVisibleRows = 20; // Nombre de lignes affichées au départ
+  const table = document.querySelector("#tableContainer table");
+  if (!table) return;
+
+  const rows = table.querySelectorAll("tbody tr");
+  if (rows.length <= maxVisibleRows) return; // rien à faire si petit tableau
+
+  // Masquer les lignes au-delà du seuil
+  for (let i = maxVisibleRows; i < rows.length; i++) {
+    rows[i].style.display = "none";
+  }
+
+  // Ajouter un bouton "Voir plus"
+  const btn = document.createElement("button");
+  btn.className = "show-more-btn";
+  btn.textContent = "Voir plus";
+
+  btn.addEventListener("click", function() {
+    const hiddenRows = Array.from(rows).filter(r => r.style.display === "none");
+    hiddenRows.slice(0, maxVisibleRows).forEach(r => r.style.display = "table-row");
+
+    if (hiddenRows.length <= maxVisibleRows) {
+      btn.style.display = "none"; // cacher le bouton si tout est visible
+    }
+  });
+
+  // Ajouter le bouton après le tableau
+  table.parentNode.appendChild(btn);
+});
+</script>
+  
 <body>
   <div id="bandeau"></div>
   <div id="header"></div>
