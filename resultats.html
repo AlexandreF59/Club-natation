@@ -94,34 +94,52 @@
 </head>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const maxVisibleRows = 20; // Nombre de lignes affichées au départ
-  const table = document.querySelector("#tableContainer table");
-  if (!table) return;
+  const maxVisibleRows = 20; // nombre de lignes visibles par défaut
 
-  const rows = table.querySelectorAll("tbody tr");
-  if (rows.length <= maxVisibleRows) return; // rien à faire si petit tableau
+  function appliquerPagination(tableContainer) {
+    const table = tableContainer.querySelector("table");
+    if (!table) return;
 
-  // Masquer les lignes au-delà du seuil
-  for (let i = maxVisibleRows; i < rows.length; i++) {
-    rows[i].style.display = "none";
+    const rows = table.querySelectorAll("tbody tr");
+    if (rows.length <= maxVisibleRows) return; // pas besoin de bouton si petit tableau
+
+    // masquer les lignes au-delà du seuil
+    for (let i = maxVisibleRows; i < rows.length; i++) {
+      rows[i].style.display = "none";
+    }
+
+    // bouton "Voir plus"
+    const btn = document.createElement("button");
+    btn.className = "show-more-btn";
+    btn.textContent = "Voir plus";
+
+    btn.addEventListener("click", function() {
+      const hiddenRows = Array.from(rows).filter(r => r.style.display === "none");
+      hiddenRows.slice(0, maxVisibleRows).forEach(r => r.style.display = "table-row");
+
+      if (hiddenRows.length <= maxVisibleRows) {
+        btn.style.display = "none"; // tout affiché → on cache le bouton
+      }
+    });
+
+    tableContainer.appendChild(btn);
   }
 
-  // Ajouter un bouton "Voir plus"
-  const btn = document.createElement("button");
-  btn.className = "show-more-btn";
-  btn.textContent = "Voir plus";
-
-  btn.addEventListener("click", function() {
-    const hiddenRows = Array.from(rows).filter(r => r.style.display === "none");
-    hiddenRows.slice(0, maxVisibleRows).forEach(r => r.style.display = "table-row");
-
-    if (hiddenRows.length <= maxVisibleRows) {
-      btn.style.display = "none"; // cacher le bouton si tout est visible
+  // observer dynamiquement les éléments ajoutés dans les conteneurs
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      mutation.addedNodes.forEach(node => {
+        if (node.nodeType === 1 && node.tagName === "TABLE") {
+          const container = node.closest(".table-container");
+          if (container) appliquerPagination(container);
+        }
+      });
     }
   });
 
-  // Ajouter le bouton après le tableau
-  table.parentNode.appendChild(btn);
+  document.querySelectorAll(".table-container").forEach(container => {
+    observer.observe(container, { childList: true });
+  });
 });
 </script>
   
