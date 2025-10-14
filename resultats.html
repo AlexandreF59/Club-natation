@@ -3,26 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Résultats – Hauts de Flandre Natation</title>
-  <meta name="description" content="Consultez les résultats des compétitions du club Hauts de Flandre Natation. Performances, classements et progression de nos nageurs dans les Hauts-de-France.">
-  <meta name="keywords" content="résultats natation, compétitions, performances, Hauts de Flandre Natation, FFN, Wormhout, CCHF, natation sportive, championnats, temps, classement">
-  <meta name="author" content="Hauts de Flandre Natation">
+  <meta name="description" content="Consultez les résultats des compétitions du club Hauts de Flandre Natation.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://hautsdeflandrenatation.fr/resultats.html">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Résultats – Hauts de Flandre Natation">
-  <meta property="og:description" content="Découvrez les performances de nos nageurs lors des compétitions FFN. Classements et temps officiels de Hauts de Flandre Natation.">
-  <meta property="og:image" content="https://hautsdeflandrenatation.fr/images/logo_2025.png">
-  <meta property="og:url" content="https://hautsdeflandrenatation.fr/resultats.html">
-  <meta property="og:type" content="website">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Résultats – Hauts de Flandre Natation">
-  <meta name="twitter:description" content="Consultez les résultats et performances de nos nageurs. Tous les classements FFN disponibles sur le site officiel du club.">
-  <meta name="twitter:image" content="https://hautsdeflandrenatation.fr/images/logo_2025.png">
-
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="images/favicon.png">
 
@@ -37,14 +19,12 @@
       background-color: #f9f9f9;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-
     .csv-table th, .csv-table td {
       border: 1px solid #ccc;
       padding: 12px 15px;
       text-align: center;
       white-space: nowrap;
     }
-
     .csv-table th {
       background-color: #0057b8;
       color: white;
@@ -52,29 +32,14 @@
       top: 0;
       z-index: 2;
     }
+    .csv-table tr:nth-child(even) { background-color: #e6f0fa; }
+    .csv-table tr:hover { background-color: #d0e4ff; }
 
-    .csv-table tr:nth-child(even) {
-      background-color: #e6f0fa;
-    }
+    h2 { text-align: center; margin-top: 2em; }
 
-    .csv-table tr:hover {
-      background-color: #d0e4ff;
-    }
+    select.colFilter { margin-top: 5px; width: 100%; }
 
-    h2 {
-      text-align: center;
-      margin-top: 2em;
-    }
-
-    select.colFilter {
-      margin-top: 5px;
-      width: 100%;
-    }
-
-    .best-record {
-      background-color: gold !important;
-      font-weight: bold;
-    }
+    .best-record { background-color: gold !important; font-weight: bold; }
 
     .table-container {
       width: 100%;
@@ -83,13 +48,8 @@
       margin: 1.5em auto;
     }
 
-    .table-container::-webkit-scrollbar {
-      height: 6px;
-    }
-    .table-container::-webkit-scrollbar-thumb {
-      background-color: #ccc;
-      border-radius: 3px;
-    }
+    .table-container::-webkit-scrollbar { height: 6px; }
+    .table-container::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
 
     /* Bouton "Afficher plus" */
     .show-more-btn {
@@ -104,13 +64,16 @@
       font-weight: bold;
       transition: background-color 0.3s ease;
     }
+    .show-more-btn:hover { background-color: #003f82; }
 
-    .show-more-btn:hover {
-      background-color: #003f82;
+    /* Responsive: make sure tables remain usable on small screens */
+    @media (max-width: 768px) {
+      .csv-table { font-size: 0.9em; min-width: 520px; }
+      .csv-table th, .csv-table td { padding: 8px; }
+      select.colFilter { font-size: 0.85em; }
     }
   </style>
 </head>
-
 <body>
   <div id="bandeau"></div>
   <div id="header"></div>
@@ -119,295 +82,246 @@
     <section class="intro-section">
       <h2>Résultats du club</h2>
       <p>
-        Retrouvez ici les performances de nos nageurs, extraites des résultats officiels de la 
-        <a href="https://www.ffnatation.fr" target="_blank" rel="noopener noreferrer">
-          <strong>Fédération Française de Natation (FFN)</strong>
-        </a>. 
+        Retrouvez ici les performances de nos nageurs, extraites des résultats officiels de la
+        <a href="https://www.ffnatation.fr" target="_blank" rel="noopener noreferrer"><strong>Fédération Française de Natation (FFN)</strong></a>.
       </p>
-      <p>
-        Ces données reflètent les compétitions auxquelles nos athlètes ont participé et illustrent leurs progrès tout au long de la saison.
-      </p>
+      <p>Ces données reflètent les compétitions auxquelles nos athlètes ont participé et illustrent leurs progrès tout au long de la saison.</p>
     </section>
 
     <h2>Records Féminins</h2>
-    <div class="table-container">
-      <div id="recordsFeminin">Chargement...</div>
-    </div>
+    <div class="table-container"><div id="recordsFeminin">Chargement...</div></div>
 
     <h2>Records Masculins</h2>
-    <div class="table-container">
-      <div id="recordsMasculin">Chargement...</div>
-    </div>
+    <div class="table-container"><div id="recordsMasculin">Chargement...</div></div>
 
     <h2>Tous les résultats</h2>
-    <div class="table-container">
-      <div id="tableContainer">Chargement des résultats...</div>
-    </div>
+    <div class="table-container"><div id="tableContainer">Chargement des résultats...</div></div>
   </main>
 
   <footer id="footer"></footer>
 
-  <!-- GoatCounter -->
-  <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count"
-          async src="https://gc.zgo.at/count.js"></script>
+  <!-- GoatCounter (optionnel si tu l'utilises) -->
+  <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 
-  <!-- Chargement bandeau / header / footer -->
+  <!-- charger bandeau / header / footer -->
   <script>
-    fetch('bandeau.html')
-      .then(r => r.text())
-      .then(data => {
-        document.getElementById('bandeau').innerHTML = data;
-        const scripts = document.getElementById('bandeau').getElementsByTagName('script');
-        for (let s of scripts) {
+    // charge un fichier HTML et ré-exécute les scripts qu'il contient
+    async function loadFragment(id, url) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const html = await res.text();
+        document.getElementById(id).innerHTML = html;
+        // réexécuter scripts inlines et externes
+        const container = document.getElementById(id);
+        const scripts = container.querySelectorAll('script');
+        scripts.forEach(s => {
           const newScript = document.createElement('script');
           if (s.src) newScript.src = s.src;
           else newScript.textContent = s.textContent;
           document.body.appendChild(newScript);
-        }
-      });
+        });
+      } catch (e) {
+        console.error('loadFragment', url, e);
+      }
+    }
 
-    fetch('header.html')
-      .then(r => r.text())
-      .then(data => document.getElementById('header').innerHTML = data);
-
-    fetch('footer.html')
-      .then(r => r.text())
-      .then(data => document.getElementById('footer').innerHTML = data);
+    loadFragment('bandeau', 'bandeau.html');
+    loadFragment('header', 'header.html');
+    loadFragment('footer', 'footer.html');
   </script>
 
-  <!-- Script principal -->
+  <!-- script principal: parse CSV, build tables, filtres, et "Afficher plus" -->
   <script>
     function timeToSeconds(t) {
       if (!t) return Infinity;
-      const parts = t.split(":").map(p => p.trim());
+      const parts = t.split(':').map(p => p.trim());
       if (parts.length === 1) return parseFloat(parts[0]) || Infinity;
-      if (parts.length === 2) return parseInt(parts[0]) * 60 + parseFloat(parts[1]);
+      if (parts.length === 2) return parseInt(parts[0],10) * 60 + parseFloat(parts[1]) || Infinity;
       return Infinity;
     }
+
+    // Utility: safe text for HTML (basic)
+    function esc(s){ return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
     fetch('data/resultats_csv.csv')
       .then(r => r.text())
       .then(text => {
-        const lines = text.replace(/\r/g,'').split('\n');
+        const lines = text.replace(/\r/g,'').split('\n').filter(Boolean);
+        if (lines.length === 0) throw new Error('CSV vide');
         const headers = lines[0].split(';').map(h => h.trim());
-        const data = lines.slice(1).filter(l => l.trim() !== '').map(l => l.split(';').map(c => c.trim()));
+        const data = lines.slice(1).map(l => l.split(';').map(c => c.trim()));
 
+        // colonnes d'intérêt (selon ton CSV)
         const colEpreuve = 0, colGenre = 1, colNom = 2, colTemps = 4, colCategorie = 7;
-        const categorieOrder = ["Avenirs", "Benjamins", "Juniors", "Seniors",
-                                "Master C1", "Master C2", "Master C3", "Master C4",
-                                "Master C5", "Master C6", "Master C7", "Master C8"];
 
+        const categorieOrder = ["Avenirs", "Benjamins", "Juniors", "Seniors",
+                                "Master C1","Master C2","Master C3","Master C4",
+                                "Master C5","Master C6","Master C7","Master C8"];
+
+        // construit et affiche les tableaux de records
         function buildRecordsTable(genre, containerId) {
           const records = {};
           data.filter(row => row[colGenre] === genre).forEach(row => {
             const epreuve = row[colEpreuve];
-            const cat = row[colCategorie];
-            const nom = row[colNom];
-            const temps = row[colTemps];
-            const timeSec = timeToSeconds(temps);
+            const cat = row[colCategorie] || '—';
+            const nom = row[colNom] || '';
+            const temps = row[colTemps] || '';
+            const tsec = timeToSeconds(temps);
+
             if (!records[epreuve]) records[epreuve] = {};
-            if (!records[epreuve][cat] || timeSec < records[epreuve][cat].timeSec)
-              records[epreuve][cat] = { temps, nom, timeSec };
+            if (!records[epreuve][cat] || tsec < records[epreuve][cat].timeSec) {
+              records[epreuve][cat] = { temps, nom, timeSec: tsec };
+            }
           });
 
+          const container = document.getElementById(containerId);
           if (Object.keys(records).length === 0) {
-            document.getElementById(containerId).innerHTML = "<p>Aucun record trouvé.</p>";
+            container.innerHTML = '<p>Aucun record trouvé.</p>';
             return;
           }
 
-          const usedCategories = categorieOrder.filter(cat =>
-            Object.values(records).some(e => e[cat])
-          );
+          // ne garder que les catégories utilisées (dans l'ordre souhaité)
+          const usedCats = categorieOrder.filter(cat => Object.values(records).some(r => r[cat]));
+          if (usedCats.length === 0) {
+            // fallback: toutes catégories trouvées
+            const allCats = new Set();
+            Object.values(records).forEach(r => Object.keys(r).forEach(k => allCats.add(k)));
+            usedCats.push(...Array.from(allCats));
+          }
 
-          let tableHTML = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
-          usedCategories.forEach(cat => tableHTML += `<th>${cat}</th>`);
-          tableHTML += '</tr></thead><tbody>';
+          let html = '<table class="csv-table"><thead><tr><th>Épreuve</th>';
+          usedCats.forEach(cat => html += `<th>${esc(cat)}</th>`);
+          html += '</tr></thead><tbody>';
 
           Object.keys(records).forEach(epreuve => {
-            tableHTML += `<tr><td>${epreuve}</td>`;
-            usedCategories.forEach(cat => {
-              if (records[epreuve][cat])
-                tableHTML += `<td>${records[epreuve][cat].temps} (${records[epreuve][cat].nom})</td>`;
-              else tableHTML += `<td></td>`;
+            html += `<tr><td style="text-align:left">${esc(epreuve)}</td>`;
+            usedCats.forEach(cat => {
+              const rec = records[epreuve][cat];
+              if (rec) html += `<td>${esc(rec.temps)}<br><small>${esc(rec.nom)}</small></td>`;
+              else html += '<td></td>';
             });
-            tableHTML += '</tr>';
+            html += '</tr>';
           });
 
-          tableHTML += '</tbody></table>';
-          document.getElementById(containerId).innerHTML = tableHTML;
+          html += '</tbody></table>';
+          container.innerHTML = html;
 
-          const rows = document.querySelectorAll(`#${containerId} tbody tr`);
-          rows.forEach(row => {
-            const cells = Array.from(row.querySelectorAll("td")).slice(1);
-            let bestCell = null;
-            let bestTime = Infinity;
-            cells.forEach(cell => {
-              const text = cell.textContent.trim();
-              if (text) {
-                const timeStr = text.split("(")[0].trim();
-                const secs = timeToSeconds(timeStr);
-                if (secs < bestTime) {
-                  bestTime = secs;
-                  bestCell = cell;
-                }
-              }
+          // mettre en évidence le meilleur temps (toutes catégories confondues)
+          const rows = container.querySelectorAll('tbody tr');
+          rows.forEach(r => {
+            const cells = Array.from(r.querySelectorAll('td')).slice(1);
+            let bestCell = null, bestTime = Infinity;
+            cells.forEach(c => {
+              const txt = c.textContent.trim();
+              if (!txt) return;
+              const timeStr = txt.split('\n')[0].split('(')[0].trim();
+              const secs = timeToSeconds(timeStr);
+              if (secs < bestTime) { bestTime = secs; bestCell = c; }
             });
-            if (bestCell) bestCell.classList.add("best-record");
+            if (bestCell) bestCell.classList.add('best-record');
           });
         }
 
-        buildRecordsTable("Feminin", "recordsFeminin");
-        buildRecordsTable("Masculin", "recordsMasculin");
+        // --- build records ---
+        buildRecordsTable('Feminin', 'recordsFeminin');
+        buildRecordsTable('Masculin', 'recordsMasculin');
 
-        // Tableau complet
+        // --- build full results table with filters ---
         let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
-        headers.forEach((h, i) => {
-          const uniqueValues = [...new Set(data.map(row => row[i]))].sort();
-          let selectHTML = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
-          uniqueValues.forEach(val => selectHTML += `<option value="${val}">${val}</option>`);
-          selectHTML += '</select>';
-          tableHTML += `<th>${h}<br>${selectHTML}</th>`;
+        headers.forEach((h,i) => {
+          const uniqueValues = [...new Set(data.map(row => row[i] || '').filter(Boolean))].sort();
+          let select = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
+          uniqueValues.forEach(val => select += `<option value="${esc(val)}">${esc(val)}</option>`);
+          select += '</select>';
+          tableHTML += `<th>${esc(h)}<br>${select}</th>`;
         });
         tableHTML += '</tr></thead><tbody>';
-
         data.forEach(row => {
           tableHTML += '<tr>';
-          row.forEach(cell => tableHTML += `<td>${cell}</td>`);
+          row.forEach(cell => tableHTML += `<td>${esc(cell)}</td>`);
           tableHTML += '</tr>';
         });
-
         tableHTML += '</tbody></table>';
+
         document.getElementById('tableContainer').innerHTML = tableHTML;
 
-        // Filtres
-        const filters = document.querySelectorAll('.colFilter');
-        filters.forEach(select => {
-          select.addEventListener('change', () => {
-            const rows = document.querySelectorAll('#resultsTable tbody tr');
-            rows.forEach(row => {
-              let show = true;
-              filters.forEach(f => {
-                const col = f.dataset.col;
-                const val = f.value;
-                if (val && row.cells[col].textContent !== val) show = false;
-              });
-              row.style.display = show ? '' : 'none';
-            });
+        // --- filtering logic ---
+        function applyFilters() {
+          const filters = Array.from(document.querySelectorAll('.colFilter')).map(f => ({ col: Number(f.dataset.col), val: f.value }));
+          const rows = Array.from(document.querySelectorAll('#resultsTable tbody tr'));
+          rows.forEach(row => {
+            let show = true;
+            for (const f of filters) {
+              if (f.val && row.cells[f.col].textContent !== f.val) { show = false; break; }
+            }
+            row.style.display = show ? '' : 'none';
           });
-        });
-
-        // Limiter le tableau complet à maxVisible lignes visibles,
-// et faire en sorte que "Afficher plus" respecte les filtres en cours.
-(function setupShowMore() {
-  const maxVisible = 20;
-  const table = document.querySelector("#resultsTable");
-  if (!table) return;
-
-  const tbody = table.querySelector("tbody");
-
-  function getFilters() {
-    return Array.from(document.querySelectorAll('.colFilter')).map(f => ({
-      col: parseInt(f.dataset.col, 10),
-      val: f.value
-    }));
-  }
-
-  // Retourne vrai si la ligne correspond aux filtres actuels
-  function rowMatchesFilters(row, filters) {
-    for (const f of filters) {
-      if (!f.val) continue; // pas de filtre sur cette colonne
-      if (row.cells[f.col].textContent !== f.val) return false;
-    }
-    return true;
-  }
-
-  // Met à jour l'affichage initial après application des filtres
-  function initVisibleRows() {
-    const rows = Array.from(tbody.querySelectorAll("tr"));
-    const filters = getFilters();
-
-    // Masquer tout d'abord toutes les lignes
-    rows.forEach(r => r.style.display = "none");
-
-    // Afficher jusqu'à maxVisible lignes qui correspondent aux filtres
-    let shown = 0;
-    for (const r of rows) {
-      if (rowMatchesFilters(r, filters)) {
-        if (shown < maxVisible) {
-          r.style.display = "";
-          shown++;
-        } else {
-          r.style.display = "none";
+          updateShowMoreState(); // important: réajuster le bouton "Afficher plus"
         }
-      }
-    }
 
-    // Mettre à jour le bouton (crée si nécessaire)
-    updateShowMoreButton();
-  }
+        // attach change listeners on filters
+        document.querySelectorAll('.colFilter').forEach(sel => sel.addEventListener('change', applyFilters));
 
-  // Trouve/ crée le bouton et le retourne
-  function ensureShowMoreButton() {
-    let btn = tbody.parentNode.querySelector('.show-more-btn');
-    if (!btn) {
-      btn = document.createElement('button');
-      btn.className = 'show-more-btn';
-      btn.textContent = 'Afficher plus';
-      btn.style.display = 'none';
-      tbody.parentNode.appendChild(btn);
-    }
-    return btn;
-  }
+        // --- Show more logic that respects filters ---
+        const MAX_BATCH = 20;
+        function updateShowMoreState() {
+          const tbody = document.querySelector('#resultsTable tbody');
+          if (!tbody) return;
+          let btn = tbody.parentElement.querySelector('.show-more-btn');
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          const visibleMatching = rows.filter(r => r.style.display !== 'none' && r.dataset._shown === 'true');
+          const matching = rows.filter(r => r.style.display !== 'none');
 
-  // Met à jour la visibilité et le texte du bouton selon le nombre de lignes restantes
-  function updateShowMoreButton() {
-    const rows = Array.from(tbody.querySelectorAll("tr"));
-    const filters = getFilters();
+          // initially mark none as _shown if not set
+          let shownCount = rows.filter(r => r.dataset._shown === 'true').length;
 
-    const hiddenMatching = rows.filter(r => {
-      return r.style.display === 'none' && rowMatchesFilters(r, filters);
-    });
+          // if no _shown markers yet, initialize first batch
+          if (shownCount === 0) {
+            // hide all then show first batch of matching
+            rows.forEach(r => r.dataset._shown = 'false');
+            let shown = 0;
+            for (let r of rows) {
+              if (r.style.display === 'none') continue;
+              if (shown < MAX_BATCH) { r.dataset._shown = 'true'; r.style.display = ''; shown++; }
+              else { r.dataset._shown = 'false'; r.style.display = 'none'; }
+            }
+          } else {
+            // ensure rows that are _shown=true remain visible and others hidden
+            rows.forEach(r => {
+              if (r.dataset._shown === 'true') r.style.display = '';
+              else r.style.display = 'none';
+            });
+          }
 
-    const btn = ensureShowMoreButton();
-    if (hiddenMatching.length > 0) {
-      btn.style.display = '';
-      btn.textContent = `Afficher plus (${hiddenMatching.length} restant${hiddenMatching.length>1?'s':''})`;
-    } else {
-      btn.style.display = 'none';
-    }
-  }
+          // count remaining matching hidden
+          const remaining = rows.filter(r => r.style.display === 'none' && r.dataset._shown === 'false').length;
+          if (!btn) {
+            btn = document.createElement('button');
+            btn.className = 'show-more-btn';
+            btn.textContent = `Afficher plus (${remaining})`;
+            tbody.parentElement.appendChild(btn);
+            btn.addEventListener('click', function() {
+              // show next batch of matching hidden rows
+              const hiddenMatching = rows.filter(r => r.dataset._shown === 'false' && r.style.display === 'none');
+              hiddenMatching.slice(0, MAX_BATCH).forEach(r => { r.dataset._shown = 'true'; r.style.display = ''; });
+              const newRemaining = rows.filter(r => r.dataset._shown === 'false' && r.style.display === 'none').length;
+              if (newRemaining === 0) btn.style.display = 'none';
+              else btn.textContent = `Afficher plus (${newRemaining})`;
+            });
+          } else {
+            if (remaining === 0) btn.style.display = 'none';
+            else { btn.style.display = ''; btn.textContent = `Afficher plus (${remaining})`; }
+          }
+        }
 
-  // Clique sur "Afficher plus" : montre les next N lignes MATCHANT les filtres
-  function onShowMoreClick() {
-    const rows = Array.from(tbody.querySelectorAll("tr"));
-    const filters = getFilters();
+        // initialize pagination / show-more after table is inserted
+        // call applyFilters once to set initial visibility + show-more state
+        applyFilters();
+        updateShowMoreState();
 
-    const hiddenMatching = rows.filter(r => {
-      return r.style.display === 'none' && rowMatchesFilters(r, filters);
-    });
-
-    const toShow = hiddenMatching.slice(0, maxVisible);
-    toShow.forEach(r => r.style.display = "");
-
-    updateShowMoreButton();
-  }
-
-  // Attacher l'événement au bouton
-  const btn = ensureShowMoreButton();
-  btn.addEventListener('click', onShowMoreClick);
-
-  // Lorsque les filtres changent, réinitialiser l'affichage
-  const filters = document.querySelectorAll('.colFilter');
-  filters.forEach(select => {
-    select.addEventListener('change', () => {
-      initVisibleRows();
-    });
-  });
-
-  // Initialisation une première fois
-  initVisibleRows();
-})();
-
+        // Also update show-more whenever filters change (already wired in applyFilters)
+      })
       .catch(err => {
         console.error(err);
         document.getElementById('tableContainer').textContent = 'Erreur lors du chargement des résultats.';
