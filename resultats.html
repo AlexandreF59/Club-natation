@@ -27,11 +27,11 @@
   <link rel="icon" type="image/png" href="images/favicon.png">
   
   <style>
+    /* Tableaux CSV */
     .csv-table {
       border-collapse: collapse;
-      width: 90%;
-      max-width: 1200px;
-      margin: 2em auto;
+      width: 100%;
+      min-width: 600px;
       background-color: #f9f9f9;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
@@ -40,11 +40,15 @@
       border: 1px solid #ccc;
       padding: 12px 15px;
       text-align: center;
+      white-space: nowrap; /* évite que le texte coupe sur 2 lignes */
     }
 
     .csv-table th {
       background-color: #0057b8;
       color: white;
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
 
     .csv-table tr:nth-child(even) {
@@ -65,10 +69,26 @@
       width: 100%;
     }
 
-    /* Ajout pour mettre en évidence le meilleur temps */
+    /* Meilleur temps */
     .best-record {
       background-color: gold !important;
       font-weight: bold;
+    }
+
+    /* Conteneur scrollable pour les tableaux larges */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 1.5em auto;
+    }
+
+    .table-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 3px;
     }
   </style>
 </head>
@@ -81,21 +101,29 @@
       <h2>Résultats du club</h2>
       <p>
         Retrouvez ici les performances de nos nageurs, extraites des résultats officiels de la 
-        <a href="https://www.ffnatation.fr" target="_blank"><strong>Fédération Française de Natation (FFN)</strong></a>. 
+        <a href="https://www.ffnatation.fr" target="_blank" rel="noopener noreferrer">
+          <strong>Fédération Française de Natation (FFN)</strong>
+        </a>. 
       </p>
       <p>
-        Ces données reflètent les compétitions auxquelles nos athlètes ont participé et illustrent leurs progrès et leurs succès tout au long de la saison.
+        Ces données reflètent les compétitions auxquelles nos athlètes ont participé et illustrent leurs progrès tout au long de la saison.
       </p>
     </section>
 
     <h2>Records Féminins</h2>
-    <div id="recordsFeminin">Chargement...</div>
+    <div class="table-container">
+      <div id="recordsFeminin">Chargement...</div>
+    </div>
 
     <h2>Records Masculins</h2>
-    <div id="recordsMasculin">Chargement...</div>
+    <div class="table-container">
+      <div id="recordsMasculin">Chargement...</div>
+    </div>
 
     <h2>Tous les résultats</h2>
-    <div id="tableContainer">Chargement des résultats...</div>
+    <div class="table-container">
+      <div id="tableContainer">Chargement des résultats...</div>
+    </div>
   </main>
 
   <footer id="footer"></footer>
@@ -105,43 +133,34 @@
 
   <script>
     // Charger le bandeau
-  fetch('bandeau.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('bandeau').innerHTML = data;
-
-      // ➕ Réexécuter le script inclus dans bandeau.html
-      const scripts = document.getElementById('bandeau').getElementsByTagName('script');
-      for (let i = 0; i < scripts.length; i++) {
-        const script = document.createElement('script');
-        if (scripts[i].src) {
-          script.src = scripts[i].src;
-        } else {
-          script.textContent = scripts[i].textContent;
+    fetch('bandeau.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('bandeau').innerHTML = data;
+        const scripts = document.getElementById('bandeau').getElementsByTagName('script');
+        for (let i = 0; i < scripts.length; i++) {
+          const script = document.createElement('script');
+          if (scripts[i].src) script.src = scripts[i].src;
+          else script.textContent = scripts[i].textContent;
+          document.body.appendChild(script);
         }
-        document.body.appendChild(script);
-      }
-    });
-    
-    // Charger le header
+      });
+
+    // Charger le header et le footer
     fetch('header.html')
       .then(response => response.text())
-      .then(data => { document.getElementById('header').innerHTML = data; });
-
-    // Charger le footer
+      .then(data => document.getElementById('header').innerHTML = data);
+    
     fetch('footer.html')
       .then(response => response.text())
-      .then(data => { document.getElementById('footer').innerHTML = data; });
+      .then(data => document.getElementById('footer').innerHTML = data);
 
-    // Fonction pour convertir un temps en secondes
+    // Convertir un temps en secondes
     function timeToSeconds(t) {
       if (!t) return Infinity;
       const parts = t.split(":").map(p => p.trim());
-      if (parts.length === 1) {
-        return parseFloat(parts[0]) || Infinity;
-      } else if (parts.length === 2) {
-        return parseInt(parts[0]) * 60 + parseFloat(parts[1]);
-      }
+      if (parts.length === 1) return parseFloat(parts[0]) || Infinity;
+      if (parts.length === 2) return parseInt(parts[0]) * 60 + parseFloat(parts[1]);
       return Infinity;
     }
 
@@ -153,33 +172,22 @@
         const headers = lines[0].split(';').map(h => h.trim());
         const data = lines.slice(1).filter(l => l.trim() !== '').map(l => l.split(';').map(c => c.trim()));
 
-        // Indices des colonnes
-        const colEpreuve = 0;
-        const colGenre = 1;
-        const colNom = 2;
-        const colTemps = 4;
-        const colCategorie = 7;
-
-        // Catégories ordonnées
+        const colEpreuve = 0, colGenre = 1, colNom = 2, colTemps = 4, colCategorie = 7;
         const categorieOrder = ["Avenirs", "Benjamins", "Juniors", "Seniors",
                                 "Master C1", "Master C2", "Master C3", "Master C4",
                                 "Master C5", "Master C6", "Master C7", "Master C8"];
 
-        // Regrouper les records par genre
         function buildRecordsTable(genre, containerId) {
           const records = {};
-
           data.filter(row => row[colGenre] === genre).forEach(row => {
             const epreuve = row[colEpreuve];
             const cat = row[colCategorie];
             const nom = row[colNom];
             const temps = row[colTemps];
             const timeSec = timeToSeconds(temps);
-
             if (!records[epreuve]) records[epreuve] = {};
-            if (!records[epreuve][cat] || timeSec < records[epreuve][cat].timeSec) {
+            if (!records[epreuve][cat] || timeSec < records[epreuve][cat].timeSec)
               records[epreuve][cat] = { temps, nom, timeSec };
-            }
           });
 
           if (Object.keys(records).length === 0) {
@@ -187,7 +195,6 @@
             return;
           }
 
-          // Colonnes présentes uniquement
           const usedCategories = categorieOrder.filter(cat =>
             Object.values(records).some(e => e[cat])
           );
@@ -199,11 +206,9 @@
           Object.keys(records).forEach(epreuve => {
             tableHTML += `<tr><td>${epreuve}</td>`;
             usedCategories.forEach(cat => {
-              if (records[epreuve][cat]) {
+              if (records[epreuve][cat])
                 tableHTML += `<td>${records[epreuve][cat].temps} (${records[epreuve][cat].nom})</td>`;
-              } else {
-                tableHTML += `<td></td>`;
-              }
+              else tableHTML += `<td></td>`;
             });
             tableHTML += '</tr>';
           });
@@ -211,13 +216,11 @@
           tableHTML += '</tbody></table>';
           document.getElementById(containerId).innerHTML = tableHTML;
 
-          // Mettre en évidence le meilleur temps toutes catégories confondues par épreuve
           const rows = document.querySelectorAll(`#${containerId} tbody tr`);
           rows.forEach(row => {
             const cells = Array.from(row.querySelectorAll("td")).slice(1);
             let bestCell = null;
             let bestTime = Infinity;
-
             cells.forEach(cell => {
               const text = cell.textContent.trim();
               if (text) {
@@ -229,7 +232,6 @@
                 }
               }
             });
-
             if (bestCell) bestCell.classList.add("best-record");
           });
         }
@@ -237,12 +239,12 @@
         buildRecordsTable("Feminin", "recordsFeminin");
         buildRecordsTable("Masculin", "recordsMasculin");
 
-        // Tableau complet avec filtres
+        // Tableau complet
         let tableHTML = '<table id="resultsTable" class="csv-table"><thead><tr>';
         headers.forEach((h, i) => {
           const uniqueValues = [...new Set(data.map(row => row[i]))].sort();
           let selectHTML = `<select class="colFilter" data-col="${i}"><option value="">Tous</option>`;
-          uniqueValues.forEach(val => { selectHTML += `<option value="${val}">${val}</option>`; });
+          uniqueValues.forEach(val => selectHTML += `<option value="${val}">${val}</option>`);
           selectHTML += '</select>';
           tableHTML += `<th>${h}<br>${selectHTML}</th>`;
         });
@@ -257,7 +259,6 @@
         tableHTML += '</tbody></table>';
         document.getElementById('tableContainer').innerHTML = tableHTML;
 
-        // Attacher les filtres
         const filters = document.querySelectorAll('.colFilter');
         filters.forEach(select => {
           select.addEventListener('change', () => {
@@ -281,3 +282,4 @@
   </script>
 </body>
 </html>
+
