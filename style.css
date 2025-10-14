@@ -268,6 +268,39 @@ select.colFilter {
 }
 
 /* ===========================
+   TABLEAUX RESPONSIVES (toutes tailles)
+   =========================== */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 2em;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.table-container th,
+.table-container td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table-container th {
+  background-color: #0057b8;
+  color: white;
+}
+
+.table-container tr:nth-child(even) {
+  background-color: #f2f7ff;
+}
+
+/* ===========================
    VERSION MOBILE
    =========================== */
 @media (max-width: 768px) {
@@ -316,7 +349,7 @@ select.colFilter {
     padding: 15px 0;
   }
 
-  /* Amélioration des tableaux sur petits écrans */
+  /* Ajustement des tableaux pour mobile */
   .csv-table {
     font-size: 0.9em;
     min-width: 600px;
