@@ -296,25 +296,118 @@
           });
         });
 
-        // Limiter le tableau complet à 20 lignes visibles
-        const table = document.querySelector("#resultsTable");
-        if (table) {
-          const rows = Array.from(table.querySelectorAll("tbody tr"));
-          const maxVisible = 20;
-          if (rows.length > maxVisible) {
-            rows.slice(maxVisible).forEach(tr => tr.style.display = "none");
-            const btn = document.createElement("button");
-            btn.className = "show-more-btn";
-            btn.textContent = "Afficher plus";
-            btn.addEventListener("click", () => {
-              const hidden = rows.filter(r => r.style.display === "none");
-              hidden.slice(0, maxVisible).forEach(r => r.style.display = "");
-              if (hidden.length <= maxVisible) btn.style.display = "none";
-            });
-            table.parentNode.appendChild(btn);
-          }
+        // Limiter le tableau complet à maxVisible lignes visibles,
+// et faire en sorte que "Afficher plus" respecte les filtres en cours.
+(function setupShowMore() {
+  const maxVisible = 20;
+  const table = document.querySelector("#resultsTable");
+  if (!table) return;
+
+  const tbody = table.querySelector("tbody");
+
+  function getFilters() {
+    return Array.from(document.querySelectorAll('.colFilter')).map(f => ({
+      col: parseInt(f.dataset.col, 10),
+      val: f.value
+    }));
+  }
+
+  // Retourne vrai si la ligne correspond aux filtres actuels
+  function rowMatchesFilters(row, filters) {
+    for (const f of filters) {
+      if (!f.val) continue; // pas de filtre sur cette colonne
+      if (row.cells[f.col].textContent !== f.val) return false;
+    }
+    return true;
+  }
+
+  // Met à jour l'affichage initial après application des filtres
+  function initVisibleRows() {
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const filters = getFilters();
+
+    // Masquer tout d'abord toutes les lignes
+    rows.forEach(r => r.style.display = "none");
+
+    // Afficher jusqu'à maxVisible lignes qui correspondent aux filtres
+    let shown = 0;
+    for (const r of rows) {
+      if (rowMatchesFilters(r, filters)) {
+        if (shown < maxVisible) {
+          r.style.display = "";
+          shown++;
+        } else {
+          r.style.display = "none";
         }
-      })
+      }
+    }
+
+    // Mettre à jour le bouton (crée si nécessaire)
+    updateShowMoreButton();
+  }
+
+  // Trouve/ crée le bouton et le retourne
+  function ensureShowMoreButton() {
+    let btn = tbody.parentNode.querySelector('.show-more-btn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.className = 'show-more-btn';
+      btn.textContent = 'Afficher plus';
+      btn.style.display = 'none';
+      tbody.parentNode.appendChild(btn);
+    }
+    return btn;
+  }
+
+  // Met à jour la visibilité et le texte du bouton selon le nombre de lignes restantes
+  function updateShowMoreButton() {
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const filters = getFilters();
+
+    const hiddenMatching = rows.filter(r => {
+      return r.style.display === 'none' && rowMatchesFilters(r, filters);
+    });
+
+    const btn = ensureShowMoreButton();
+    if (hiddenMatching.length > 0) {
+      btn.style.display = '';
+      btn.textContent = `Afficher plus (${hiddenMatching.length} restant${hiddenMatching.length>1?'s':''})`;
+    } else {
+      btn.style.display = 'none';
+    }
+  }
+
+  // Clique sur "Afficher plus" : montre les next N lignes MATCHANT les filtres
+  function onShowMoreClick() {
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const filters = getFilters();
+
+    const hiddenMatching = rows.filter(r => {
+      return r.style.display === 'none' && rowMatchesFilters(r, filters);
+    });
+
+    const toShow = hiddenMatching.slice(0, maxVisible);
+    toShow.forEach(r => r.style.display = "");
+
+    updateShowMoreButton();
+  }
+
+  // Attacher l'événement au bouton
+  const btn = ensureShowMoreButton();
+  btn.addEventListener('click', onShowMoreClick);
+
+  // Lorsque les filtres changent, réinitialiser l'affichage
+  const filters = document.querySelectorAll('.colFilter');
+  filters.forEach(select => {
+    select.addEventListener('change', () => {
+      initVisibleRows();
+    });
+  });
+
+  // Initialisation une première fois
+  initVisibleRows();
+})();
+
       .catch(err => {
         console.error(err);
         document.getElementById('tableContainer').textContent = 'Erreur lors du chargement des résultats.';
