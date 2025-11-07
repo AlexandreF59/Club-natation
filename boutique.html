@@ -26,105 +26,212 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="images/favicon.png">
   
-  <style>
-    .product {
-      max-width: 400px;
-      margin: 2em auto;
-      padding: 20px;
-      background: #f0f8ff;
-      border-left: 6px solid #0057b8;
-      border-right: 6px solid #ffcc00;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .product h3 {
-      text-align: center;
-      color: #0057b8;
-    }
-
-    .price {
-      text-align: center;
-      font-size: 1.2em;
-      font-weight: bold;
-      margin: 10px 0;
-      color: #333;
-    }
-
-    .slideshow-container {
-      position: relative;
-      max-width: 100%;
-      margin: 15px auto;
-    }
-
-    .slides {
-      width: 100%;
-      display: none;
-      border-radius: 6px;
-    }
-
-    .prev, .next {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 8px;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.5);
-      user-select: none;
-    }
-
-    .prev { left: 10px; }
-    .next { right: 10px; }
-
-    .product p {
-      line-height: 1.5;
-      color: #333;
-      margin-top: 10px;
-    }
-  </style>
-</head>
+  </head>
 <body>
   <div id="bandeau"></div>
   <div id="header"></div>
 
-  <main>
+  <main class="boutique">
+    
+    <section class="intro-section">
     <h2 style="text-align:center;">Notre boutique</h2>
-    <p style="text-align:center;">Découvrez nos articles disponibles à la vente. Pour commander, contactez-nous directement.</p>
+    <p style="text-align:center;">Découvrez nos articles disponibles à la vente. <strong>Pour commander, c'est facile et sécurisé grâce à HelloAsso.</strong></p>
+    💬 <strong>Un petit mot du club :</strong><br>
+    <p>
+    Pour garder une gestion simple et éviter de bloquer la trésorerie du club, 
+    <strong>nous ne tenons pas de stock sur les articles</strong> 🧾.<br>
+    Chaque commande est donc <strong>fabriquée spécialement pour vous</strong> 💙<br>
+    Comptez un délai d’environ <strong>3 semaines</strong> avant la livraison — 
+    le temps de produire, personnaliser et préparer votre article avec soin ✨<br><br>
+    👉 Merci de votre compréhension et de votre soutien — 
+    c’est grâce à vous que le club continue de nager haut et fort ! 🏊‍♀️💪
+    </p>
+    </section>
 
-    <!-- Produit 1 -->
-    <div class="product">
-      <h3>Bonnet du club</h3>
-      <div class="slideshow-container">
-        <img class="slides" src="images_boutique/bonnet1.jpg" alt="Bonnet du club - vue 1">
-        <img class="slides" src="images_boutique/bonnet2.jpg" alt="Bonnet du club - vue 2">
-        <a class="prev">❮</a>
-        <a class="next">❯</a>
-      </div>
-      <div class="price">coming soon €</div>
-      <p>Bonnet en silicone aux couleurs du club. Taille unique. Idéal pour les entraînements et compétitions.</p>
-    </div>
+</div>
+    <div class="product-grid">
 
-    <!-- Produit 2 -->
-    <div class="product">
-      <h3>T-shirt Hauts de Flandre Natation</h3>
-      <div class="slideshow-container">
-        <img class="slides" src="images_boutique/tshirt1.jpg" alt="T-shirt du club - face">
-        <img class="slides" src="images_boutique/tshirt2.jpg" alt="T-shirt du club - dos">
-        <a class="prev">❮</a>
-        <a class="next">❯</a>
+      <!-- Tshirt femme -->
+        <div class="product">
+          <h3>T-shirt Hauts de Flandre Natation – Femme</h3>
+          <div class="slideshow-container">
+          <img class="slides" src="images_boutique/Tshirt_femme_bleu_devant.jpg" alt="T-shirt du club - face">
+          <img class="slides" src="images_boutique/Tshirt_femme_bleu_dos.jpg" alt="T-shirt du club - dos">
+          <img class="slides" src="images_boutique/Tshirt_femme_bleu_coté.jpg" alt="T-shirt du club - coté">
+          <a class="prev">❮</a>
+          <a class="next">❯</a>
+        </div>
+
+        <div class="price">15 €</div>
+
+        <p>
+        Alliez <strong>élégance et confort</strong> avec ce <strong>tee-shirt cintré pour femme</strong>, parfait pour afficher les couleurs du club au quotidien.<br>
+        Doté d’une <strong>encolure ras du cou</strong> et de <strong>manches courtes</strong>, il se distingue par son <strong>col en bord côte mixte spandex de 1,5 cm</strong> avec <strong>couture rabattue sur le devant</strong> et son <strong>ruban de renfort d’épaule à épaule</strong> en couleur contrastée.<br>
+        Les <strong>coutures stretch</strong> assurent une excellente tenue et un confort durable, tandis que la <strong>coupe cintrée</strong> met en valeur la silhouette.<br>
+        <br>
+        <strong>Détails exclusifs :</strong> imprimé avec le <strong>logo du club sur l’avant</strong> et le <strong>logo de la CCHF sur l’épaule</strong>.<br>
+        <br>
+        <strong>Composition :</strong> 100 % coton<br>
+        <strong>Aspect :</strong> Jersey doux et respirant<br>
+        <strong>Poids :</strong> 155 g/m²<br>
+        <strong>Tailles disponibles :</strong> XS – S – M – L – XL – XXL<br>
+        </p>
+
+        <!-- Bouton HelloAsso -->
+        <div class="buy-button">
+          <a id="buyLink" href="https://www.helloasso.com/associations/hauts-de-flandre-natation/boutiques/t-shirt-femme-hauts-de-flandre-natation"
+          target="_blank"
+          class="helloasso-btn">
+          🛒 Commander sur HelloAsso
+          </a>
+        </div>
       </div>
-      <div class="price">coming soon €</div>
-      <p>T-shirt officiel du club, confortable et respirant. Disponible en plusieurs tailles (S à XL).</p>
+
+      <!-- Tshirt homme -->
+        <div class="product">
+          <h3>T-shirt Hauts de Flandre Natation – Homme</h3>
+          <div class="slideshow-container">
+          <img class="slides" src="images_boutique/Tshirt_homme_bleu_devant.jpg" alt="T-shirt du club - face">
+          <img class="slides" src="images_boutique/Tshirt_homme_bleu_dos.jpg" alt="T-shirt du club - dos">
+          <img class="slides" src="images_boutique/Tshirt_homme_bleu_coté.jpg" alt="T-shirt du club - coté">
+          <a class="prev">❮</a>
+          <a class="next">❯</a>
+        </div>
+
+        <div class="price">15 €</div>
+        
+        <p>
+        Affichez fièrement vos couleurs avec ce <strong>tee-shirt pour homme</strong> alliant confort, résistance et style sportif.<br>
+        Son <strong>design classique à encolure ras du cou</strong> et <strong>manches courtes</strong> le rend idéal pour toutes les occasions, de l’entraînement à la détente.<br>
+        Le <strong>col en bord côte mixte spandex de 1,5 cm</strong> avec <strong>couture rabattue sur le devant</strong> et le <strong>ruban de renfort contrasté d’épaule à épaule</strong> garantissent durabilité et maintien parfait.<br>
+        Les <strong>coutures stretch</strong> et la <strong>structure tubulaire</strong> (ou couture latérale pour le modèle mimétique) assurent un confort optimal et une grande liberté de mouvement.<br>
+        <br>
+        <strong>Détails exclusifs :</strong> imprimé avec le <strong>logo du club sur l’avant</strong> et le <strong>logo de la CCHF sur l’épaule</strong>.<br>
+        <br>
+        <strong>Composition :</strong> 100 % coton<br>
+        <strong>Aspect :</strong> Jersey doux et respirant<br>
+        <strong>Poids :</strong> 155 g/m²<br>
+        <strong>Tailles disponibles :</strong> XS – S – M – L – XL – XXL – 3XL – 4XL – 5XL<br>
+        </p>
+
+        <!-- Bouton HelloAsso -->
+        <div class="buy-button">
+          <a id="buyLink" href="https://www.helloasso.com/associations/hauts-de-flandre-natation/boutiques/t-shirt-homme-hauts-de-flandre-natation"
+          target="_blank"
+          class="helloasso-btn">
+          🛒 Commander sur HelloAsso
+          </a>
+        </div>
+      </div>
+
+      <!-- Sweat femme -->
+      <div class="product">
+        <h3>Sweat Hauts de Flandre Natation - Bleu roi - Femme</h3>
+        <div class="slideshow-container">
+          <img class="slides" src="images_boutique/Sweat_femme_avant_bleu.jpg" alt="Sweat - face">
+          <img class="slides" src="images_boutique/Sweat_femme_dos_bleu.jpg" alt="Sweat - dos">
+          <img class="slides" src="images_boutique/Sweat_femme_cote_bleu.jpg" alt="Sweat - cote">
+          <a class="prev">❮</a>
+          <a class="next">❯</a>
+        </div>
+
+        <div class="price">50 €</div>
+
+        <p>
+        Alliez élégance et confort avec le sweat zippé officiel du club, spécialement conçu pour les femmes.<br>
+        Sa coupe cintrée met la silhouette en valeur tout en offrant une grande liberté de mouvement.<br>
+        Doté d’une fermeture éclair SBS double curseur et d’une capuche à deux coutures, il allie style et praticité.<br>
+        Les détails raffinés — cordon blanc avec œillets métalliques, poches kangourou dont une zippée, poignets et taille en côtes élastiques — assurent un look sportif et soigné.<br>
+        Coutures renforcées pour une tenue durable, intérieur brossé pour une douceur incomparable.<br>
+        <br>
+        <strong>Détails exclusifs :</strong> imprimé avec le <strong>logo du club sur l’avant</strong> et le <strong>logo de la CCHF sur l’épaule</strong>.<br>
+        <br>
+        <strong>Composition :</strong> 70 % coton, 30 % polyester – intérieur brossé doux au toucher.<br>
+        <strong>Poids :</strong> 300 g/m²<br>
+        <strong>Tailles disponibles :</strong> XS – S – M – L – XL – XXL<br>
+        </p>
+
+        <!-- Bouton HelloAsso -->
+        <div class="buy-button">
+          <a id="buyLink" href="https://www.helloasso.com/associations/hauts-de-flandre-natation/boutiques/sweat-femme-hauts-de-flandre-natation"
+          target="_blank"
+          class="helloasso-btn">
+          🛒 Commander sur HelloAsso
+          </a>
+        </div>
+      </div>
+
+      <!-- Sweat homme -->
+      <div class="product">
+        <h3>Sweat Hauts de Flandre Natation - Bleu roi - Homme</h3>
+        <div class="slideshow-container">
+          <img class="slides" src="images_boutique/Sweat_homme_avant_bleu.jpg" alt="Sweat - face">
+          <img class="slides" src="images_boutique/Sweat_homme_dos_bleu.jpg" alt="Sweat - dos">
+          <img class="slides" src="images_boutique/Sweat_homme_cote_bleu.jpg" alt="Sweat - coté">
+          <a class="prev">❮</a>
+          <a class="next">❯</a>
+        </div>
+
+        <div class="price">50 €</div>
+
+        <p>
+        Alliez confort et style avec le sweat-shirt zippé officiel du club !<br>
+        Doté d’une fermeture éclair SBS double curseur, ce modèle associe praticité et élégance.<br>
+        Sa capuche doublée avec cordon blanc et œillets métalliques apporte une finition soignée.<br>
+        Les manches raglan et les poches kangourou, dont une petite poche zippée, assurent une liberté de mouvement et un rangement pratique.<br>
+        Poignets et taille en côtes élastiques pour un maintien parfait, coutures renforcées pour une durabilité maximale.<br>
+        <br>
+        <strong>Détails exclusifs :</strong> imprimé avec le <strong>logo du club sur l’avant</strong> et le <strong>logo de la CCHF sur l’épaule</strong>.<br>
+        <br>
+        <strong>Composition :</strong> 70 % coton, 30 % polyester – intérieur brossé doux au toucher.<br>
+        <strong>Poids :</strong> 300 g/m²<br>
+        <strong>Tailles disponibles :</strong> XS – S – M – L – XL – XXL – 3XL – 4XL – 5XL<br>
+        </p>
+
+        <!-- Bouton HelloAsso -->
+        <div class="buy-button">
+          <a id="buyLink" href="https://www.helloasso.com/associations/hauts-de-flandre-natation/boutiques/sweat-homme-hauts-de-flandre-natation"
+          target="_blank"
+          class="helloasso-btn">
+          🛒 Commander sur HelloAsso
+          </a>
+        </div>
+      </div>
+      
+      <!-- Sac à dos
+      <div class="product">
+      <h3>Sac de sport - Hauts de Flandre Natation</h3>
+      <div class="slideshow-container">
+      <img class="slides" src="images_boutique/sacface.jpg" alt="Sac du club - face">
+      <img class="slides" src="images_boutique/sacdos.jpg" alt="Sac du club - dos">
+      <a class="prev">❮</a>
+      <a class="next">❯</a>
+      </div>
+      <div class="price">35 €</div>
+      <p>
+      Transportez vos affaires avec style grâce au sac officiel du club !<br>
+      Pratique et robuste, il offre une capacité de 25 L (30 × 18 × 45 cm).<br>
+      Son grand compartiment à double fermeture éclair vous permet d’emporter tout votre équipement de natation.<br>
+      Les poches latérales en mesh et le cordon élastique réglable à l’avant ajoutent une touche de praticité.<br>
+      Confort garanti avec ses bretelles rembourrées !<br>
+      Inclut une valise à ballons amovible et un compartiment intérieur pour un rangement organisé.<br>
+      <strong>Composition :</strong> 100 % polyester 600D – résistant et durable.
+      </p>
+
+       Bouton HelloAsso
+      <div class="buy-button">
+        <a id="buyLink" href="https://www.helloasso.com/associations/hauts-de-flandre-natation/boutiques/boutique-en-ligne-vente"
+        target="_blank"
+        class="helloasso-btn">
+        🛒 Commander sur HelloAsso
+        </a>
+      </div> -->
     </div>
   </main>
 
   <footer id="footer"></footer>
     
-<!-- Script GoatCounter (placer juste avant </body>) -->
+<!-- Script GoatCounter -->
 <script data-goatcounter="https://clubhautsdeflandrenatation.goatcounter.com/count"
         async src="https://gc.zgo.at/count.js"></script>
   
