@@ -49,8 +49,46 @@
     </p>
     </section>
 
-</div>
+    <div id="slider"></div>
+  
+  </div>
     <div class="product-grid">
+      
+      <!-- Tshirt enfant -->
+        <div class="product">
+          <h3>T-shirt Hauts de Flandre Natation – Enfant</h3>
+          <div class="slideshow-container">
+          <img class="slides" src="images_boutique/Tshirt_femme_bleu_devant.jpg" alt="T-shirt du club - face">
+          <img class="slides" src="images_boutique/Tshirt_femme_bleu_dos.jpg" alt="T-shirt du club - dos">
+          <img class="slides" src="images_boutique/Tshirt_femme_bleu_coté.jpg" alt="T-shirt du club - coté">
+          <a class="prev">❮</a>
+          <a class="next">❯</a>
+        </div>
+
+        <div class="price">15 €</div>
+
+        <p>
+        Ce <strong>tee-shirt pour enfants</strong> allie <strong>confort</strong> et <strong>style</strong>, parfait pour représenter les couleurs du club tous les jours.<br>
+        Avec son <strong>col rond</strong> et ses <strong>manches courtes</strong>, il est agréable à porter et facile à enfiler. Le <strong>col en bord côte</strong> et le <strong>renfort d'épaule à épaule</strong> en couleur contrastée rendent le tee-shirt encore plus solide.<br>
+        Les <strong>coutures stretch</strong> offrent une grande liberté de mouvement, idéale pour les enfants actifs.<br>
+        <br>
+        <strong>Détails du design :</strong> impression du <strong>logo du club à l’avant</strong> et du <strong>logo de la CCHF sur l’épaule</strong>.<br>
+        <br>
+        <strong>Composition :</strong> 100 % coton<br>
+        <strong>Matière :</strong> Jersey doux et respirant<br>
+        <strong>Poids :</strong> 155 g/m²<br>
+        <strong>Tailles disponibles :</strong> 5/6 ans – 7/8 ans – 9/10 ans – 11/12 ans<br>
+        </p>
+
+        <!-- Bouton HelloAsso -->
+        <div class="buy-button">
+          <a id="buyLink" href="https://www.helloasso.com/associations/hauts-de-flandre-natation/boutiques/t-shirt-enfant-hauts-de-flandre-natation"
+          target="_blank"
+          class="helloasso-btn">
+          🛒 Commander sur HelloAsso
+          </a>
+        </div>
+      </div>
 
       <!-- Tshirt femme -->
         <div class="product">
@@ -272,6 +310,20 @@
         initSlider(container);
       });
     });
+  
+      // Charger le slider HTML dynamiquement
+  fetch('slider_tailles.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('slider').innerHTML = data;
+      // Aucun besoin d'ajouter slider.js ici, il est déjà inclus dans la page
+      // et s'initialisera automatiquement grâce au MutationObserver
+    })
+    .catch(err => console.error('Erreur chargement slider :', err));
+    </script>
+    <!-- Initialisation des sliders -->
+  <script src="slider.js">
+   
   </script>
 </body>
 </html>
