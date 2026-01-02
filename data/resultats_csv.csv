@@ -19,7 +19,7 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 Nage Libre Messieurs;Masculin;MARECHAL Evan;2011;00:49.54;01/05/2025;60;Juniors
 50 Nage Libre Messieurs;Masculin;LAVALEE Noe;2012;00:41.30;01/05/2025;266;Benjamins
 50 Nage Libre Messieurs;Masculin;POTTIER Anthony;2012;00:46.16;01/05/2025;127;Benjamins
-50 Nage Libre Dames;Feminin;COSSART Zelie;2002;00:32.75;01/05/2025;781;Seniors
+50 Nage Libre Dames;Feminin;COSSART Zélie;2002;00:32.75;01/05/2025;781;Seniors
 50 Nage Libre Dames;Feminin;ROOSE Emi;2004;00:33.22;01/05/2025;754;Seniors
 50 Nage Libre Dames;Feminin;DECRIEM Laura;2002;00:34.02;01/05/2025;708;Seniors
 50 Nage Libre Dames;Feminin;REY Maeva;2009;00:35.42;01/05/2025;632;Juniors
@@ -38,7 +38,7 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 brasse Messieurs;Masculin;RATHE Jordy;1993;00:41.38;01/05/2025;620;Master C2
 50 brasse Messieurs;Masculin;MASSA Raphael;2010;00:54.75;01/05/2025;207;Juniors
 50 brasse Messieurs;Masculin;LAVALEE Noe;2012;00:55.39;01/05/2025;192;Benjamins
-50 Brasse Dames;Feminin;COSSART Zelie;2002;00:44.09;01/05/2025;672;Seniors
+50 Brasse Dames;Feminin;COSSART Zélie;2002;00:44.09;01/05/2025;672;Seniors
 50 Brasse Dames;Feminin;BAK Victoire;2011;00:53.63;01/05/2025;337;Juniors
 50 Brasse Dames;Feminin;ROLIN Rosie;2010;00:50.66;01/05/2025;429;Benjamins
 50 Brasse Dames;Feminin;FORESI Julia;2012;00:53.06;01/05/2025;354;Benjamins
@@ -74,4 +74,21 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 Brasse Dames;Feminin;ROLIN Ines;2014;00:59.97;19/10/2025;178;Avenirs
 50 Nage Libre Messieurs;Masculin;DELANNOY Matheo;2008;00:33.64;19/10/2025;588;Juniors
 50 Nage Libre Messieurs;Masculin;LAVALLEE Noe;2012;00:40.41;19/10/2025;297;Benjamins
-
+50 Nage Libre Dames;Feminin;VERMEERSCH Line;2015;00:50.10;07/12/2025;93;Avenirs
+100 Nage Libre Dames;Feminin;WYWIJAS Elise;2014;01:38.79;07/12/2025;172;Avenirs
+100 Nage Libre Dames;Feminin;BOUCKAERT Lou;2014;01:38.97;07/12/2025;169;Avenirs
+100 Nage Libre Dames;Feminin;ROLIN Ines;2014;01:46.17;07/12/2025;86;Avenirs
+50 Dos Dames;Feminin;BOURET Jeanne;2015;01:01.95;07/12/2025;68;Avenirs
+50 Brasse Dames;Feminin;WYWIJAS Elise;2014;00:54.43;07/12/2025;314;Avenirs
+50 Brasse Dames;Feminin;BOUCKAERT Lou;2014;00:55.99;07/12/2025;272;Avenirs
+50 Brasse Dames;Feminin;ROLIN Ines;2014;00:57.51;07/12/2025;234;Avenirs
+50 Brasse Dames;Feminin;VERMEERSCH Line;2015;01:00.04;07/12/2025;176;Avenirs
+50 Brasse Dames;Feminin;BOURET Jeanne;2015;01:12.81;07/12/2025;10;Avenirs
+50 Nage Libre Messieurs;Masculin;TROLET Antone;2015;00:48.91;07/12/2025;71;Avenirs
+50 Nage Libre Messieurs;Masculin;BELLYNCK Gaspard;2015;00:52.05;07/12/2025;26;Avenirs
+50 Nage Libre Messieurs;Masculin;LARDIEZ Mathys;2015;00:57.89;07/12/2025;1;Avenirs
+50 Nage Libre Messieurs;Masculin;LARDIEZ Esteban;2015;00:58.02;07/12/2025;1;Avenirs
+50 Dos Messieurs;Masculin;TROLET Antone;2015;00:52.20;07/12/2025;146;Avenirs
+50 Dos Messieurs;Masculin;BELLYNCK Gaspard;2015;00:55.96;07/12/2025;78;Avenirs
+50 Dos Messieurs;Masculin;LARDIEZ Mathys;2015;01:06.01;07/12/2025;1;Avenirs
+50 Dos Messieurs;Masculin;LARDIEZ Esteban;2015;01:13.50;07/12/2025;1;Avenirs
