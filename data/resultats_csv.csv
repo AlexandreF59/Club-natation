@@ -19,7 +19,7 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 Nage Libre Messieurs;Masculin;MARECHAL Evan;2011;00:49.54;01/05/2025;60;Juniors
 50 Nage Libre Messieurs;Masculin;LAVALEE Noe;2012;00:41.30;01/05/2025;266;Benjamins
 50 Nage Libre Messieurs;Masculin;POTTIER Anthony;2012;00:46.16;01/05/2025;127;Benjamins
-50 Nage Libre Dames;Feminin;COSSART Zélie;2002;00:32.75;01/05/2025;781;Seniors
+50 Nage Libre Dames;Feminin;COSSART Zelie;2002;00:32.75;01/05/2025;781;Seniors
 50 Nage Libre Dames;Feminin;ROOSE Emi;2004;00:33.22;01/05/2025;754;Seniors
 50 Nage Libre Dames;Feminin;DECRIEM Laura;2002;00:34.02;01/05/2025;708;Seniors
 50 Nage Libre Dames;Feminin;REY Maeva;2009;00:35.42;01/05/2025;632;Juniors
@@ -38,7 +38,7 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 brasse Messieurs;Masculin;RATHE Jordy;1993;00:41.38;01/05/2025;620;Master C2
 50 brasse Messieurs;Masculin;MASSA Raphael;2010;00:54.75;01/05/2025;207;Juniors
 50 brasse Messieurs;Masculin;LAVALEE Noe;2012;00:55.39;01/05/2025;192;Benjamins
-50 Brasse Dames;Feminin;COSSART Zélie;2002;00:44.09;01/05/2025;672;Seniors
+50 Brasse Dames;Feminin;COSSART Zelie;2002;00:44.09;01/05/2025;672;Seniors
 50 Brasse Dames;Feminin;BAK Victoire;2011;00:53.63;01/05/2025;337;Juniors
 50 Brasse Dames;Feminin;ROLIN Rosie;2010;00:50.66;01/05/2025;429;Benjamins
 50 Brasse Dames;Feminin;FORESI Julia;2012;00:53.06;01/05/2025;354;Benjamins
@@ -127,3 +127,17 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 Dos Messieurs;Masculin;LENGLAERT Marcel;2016;00:57.60;22/03/2026;54;Avenirs
 50 Dos Messieurs;Masculin;LARDIEZ Esteban;2015;01:01.52;22/03/2026;16;Avenirs
 50 Dos Messieurs;Masculin;LARDIEZ Mathys;2015;01:02.13;22/03/2026;12;Avenirs
+50 Nage Libre Dames;Feminin;WEISPECKER Emma;2013;00:34.32;26/04/2026;691;Benjamins
+50 Nage Libre Dames;Feminin;FORESI Julia;2013;00:38.09;26/04/2026;498;Benjamins
+50 Nage Libre Dames;Feminin;VERMEERSCH Anele;2012;00:38.18;26/04/2026;493;Juniors
+50 Nage Libre Dames;Feminin;BOURET Louise;2012;00:41.24;26/04/2026;360;Juniors
+50 Nage Libre Dames;Feminin;MORTIER Lea;2010;00:42.15;26/04/2026;325;Juniors
+100 Brasse Dames;Feminin;VERMEERSCH Anele;2012;01:38.69;26/04/2026;647;Juniors
+100 Brasse Dames;Feminin;BOURET Louise;2012;01:45.09;26/04/2026;539;Juniors
+100 Brasse Dames;Feminin;FORESI Julia;2013;01:45.75;26/04/2026;528;Benjamins
+100 4 Nages Dames;Feminin;VERMEERSCH Anele;2012;01:38.48;26/04/2026;431;Juniors
+100 4 Nages Dames;Feminin;BOURET Louise;2012;01:45.39;26/04/2026;319;Juniors
+100 4 Nages Dames;Feminin;WEISPECKER Emma;2013;01:46.76;26/04/2026;299;Benjamins
+100 4 Nages Dames;Feminin;MORTIER Lea;2010;01:50.55;26/04/2026;247;Juniors
+50 Nage Libre Messieurs;Masculin;LAVALLEE Noe;2012;00:35.11;26/04/2026;516;Juniors
+100 4 Nages Messieurs;Masculin;LAVALLEE Noe;2012;01:43.65;26/04/2026;207;Juniors
