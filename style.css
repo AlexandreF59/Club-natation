@@ -45,8 +45,21 @@ body {
 .intro-section p { color:#333; margin-bottom:12px; }
 
 /* ===========================
+   image
+   =========================== */
+
+   .img-responsive {
+  width: 700px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+
+/* ===========================
    HEADER / NAV
    =========================== */
+
 header {
   display: flex;
   align-items: center;
