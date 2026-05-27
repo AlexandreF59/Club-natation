@@ -32,12 +32,12 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 Nage Libre Dames;Feminin;FORESI Julia;2013;00:46.12;01/05/2025;191;Benjamins
 50 Nage Libre Dames;Feminin;ROLIN Ines;2014;00:50.84;01/05/2025;78;Avenirs
 50 Nage Libre Dames;Feminin;VERMEERSCH Line;2015;00:51.80;01/05/2025;61;Avenirs
-50 papillon Dames;Feminin;DECRIEM Laura;2002;00:40.77;01/05/2025;516;Seniors
-50 papillon Dames;Feminin;REY Maeva;2009;00:41.37;01/05/2025;490;Juniors
-50 brasse Messieurs;Masculin;FARDOUX Alexandre;1983;00:41.23;01/05/2025;625;Master C4
-50 brasse Messieurs;Masculin;RATHE Jordy;1993;00:41.38;01/05/2025;620;Master C2
-50 brasse Messieurs;Masculin;MASSA Raphael;2010;00:54.75;01/05/2025;207;Juniors
-50 brasse Messieurs;Masculin;LAVALEE Noe;2012;00:55.39;01/05/2025;192;Benjamins
+50 Papillon Dames;Feminin;DECRIEM Laura;2002;00:40.77;01/05/2025;516;Seniors
+50 Papillon Dames;Feminin;REY Maeva;2009;00:41.37;01/05/2025;490;Juniors
+50 Brasse Messieurs;Masculin;FARDOUX Alexandre;1983;00:41.23;01/05/2025;625;Master C4
+50 Brasse Messieurs;Masculin;RATHE Jordy;1993;00:41.38;01/05/2025;620;Master C2
+50 Brasse Messieurs;Masculin;MASSA Raphael;2010;00:54.75;01/05/2025;207;Juniors
+50 Brasse Messieurs;Masculin;LAVALEE Noe;2012;00:55.39;01/05/2025;192;Benjamins
 50 Brasse Dames;Feminin;COSSART Zelie;2002;00:44.09;01/05/2025;672;Seniors
 50 Brasse Dames;Feminin;BAK Victoire;2011;00:53.63;01/05/2025;337;Juniors
 50 Brasse Dames;Feminin;ROLIN Rosie;2010;00:50.66;01/05/2025;429;Benjamins
@@ -173,3 +173,22 @@ EPREUVE;GENRE;NOM PRENOM;ANNEE NAISSANCE;TEMPS;DATE;POINTS FFN;CATEGORIE
 50 Brasse Messieurs;Masculin;LAVALLEE Noe;2012;00:50.41;01/05/2026;316;Juniors
 50 Brasse Messieurs;Masculin;LENGLAERT Marcel;2016;01:15.57;01/05/2026;1;Avenirs
 50 Papillon Messieurs;Masculin;DELANNOY Matheo;2008;00:39.40;01/05/2026;425;Juniors
+50 Nage Libre Messieurs;Masculin;FARDOUX Alexandre;1983;00:28.87;25/05/2026;943;Master C4
+50 Nage Libre Messieurs;Masculin;MARANDON Alban;1978;00:31.14;25/05/2026;835;Master C5
+50 Nage Libre Messieurs;Masculin;LESAGE Francois;1996;00:33.46;25/05/2026;612;Master C1
+100 Nage Libre Messieurs;Masculin;ANDALO Philippe;1967;01:18.61;25/05/2026;655;Master C7
+100 Nage Libre Messieurs;Masculin;DUYCK Sebastien;1979;01:17.26;25/05/2026;590;Master C5
+100 Nage Libre Messieurs;Masculin;FARDOUX Alexandre;1983;01:09.85;25/05/2026;766;Master C4
+100 Nage Libre Messieurs;Masculin;LESAGE Francois;1996;01:18.58;25/05/2026;475;Master C1
+400 Nage Libre Messieurs;Masculin;ANDALO Philippe;1967;06:28.33;25/05/2026;484;Master C7
+400 Nage Libre Messieurs;Masculin;DELANNOY Franck;1973;06:17.46;25/05/2026;451;Master C6
+800 Nage Libre Messieurs;Masculin;DELANNOY Franck;1973;12:57.21;25/05/2026;432;Master C6
+50 Brasse Messieurs;Masculin;RATHE Jordy;1993;00:40.96;25/05/2026;654;Master C2
+50 Brasse Messieurs;Masculin;MARANDON Alban;1978;00:41.92;25/05/2026;697;Master C5
+50 Brasse Messieurs;Masculin;LESAGE Francois;1996;00:44.42;25/05/2026;524;Master C1
+50 Brasse Messieurs;Masculin;FARDOUX Alexandre;1983;00:41.34;25/05/2026;696;Master C4
+100 Brasse Messieurs;Masculin;RATHE Jordy;1993;01:31.60;25/05/2026;609;Master C2
+50 Papillon Messieurs;Masculin;FARDOUX Alexandre;1983;00:34.34;25/05/2026;733;Master C4
+100 Papillon Messieurs;Masculin;RATHE Jordy;1993;01:27.38;25/05/2026;476;Master C2
+200 4 Nages Messieurs;Masculin;RATHE Jordy;1993;03:05.80;25/05/2026;512;Master C2
+200 4 Nages Messieurs;Masculin;LESAGE Francois;1996;03:23.10;25/05/2026;358;Master C1
